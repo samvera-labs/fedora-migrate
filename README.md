@@ -1,26 +1,7 @@
-# Fedora::Migrate
+# FedoraMigrate
 
-TODO: Write a gem description
+Migrates content from a Fedora3 repository to a Fedora4 one.
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'fedora-migrate'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install fedora-migrate
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 
