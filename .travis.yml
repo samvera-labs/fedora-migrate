@@ -1,0 +1,19 @@
+language: ruby
+rvm:
+  - 2.1
+  - 2.0
+env:
+  global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+notifications:
+  email:
+    recipients:
+      - "ul-dlt-hydra@lists.psu.edu"
+    on_success: "change"
+    on_failure: "always"
+  irc:
+    channels:
+      - "irc.freenode.org#scholarsphere"
+      - "irc.freenode.org#projecthydra"
+    template:
+      - "%{repository}//%{branch}@%{commit} by %{author}: %{message} - %{build_url}"
