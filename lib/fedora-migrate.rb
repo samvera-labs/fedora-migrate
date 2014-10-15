@@ -8,6 +8,7 @@ module FedoraMigrate
   autoload :RubydoraConnection
   autoload :TripleConverter
   autoload :RDFDatastreamParser
+  autoload :DatastreamMover
 
   class << self
     attr_reader :fedora_config, :config_options, :source
@@ -32,6 +33,10 @@ module FedoraMigrate
       user: "fedoraAdmin",
       password: "fedoraAdmin"
     }
+  end
+
+  def self.find pid
+    FedoraMigrate.source.connection.find(pid)
   end
 
 end
