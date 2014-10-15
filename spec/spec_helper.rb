@@ -1,5 +1,7 @@
 require 'byebug'
 require 'fedora-migrate'
+ENV['environment'] = "test"
+
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
