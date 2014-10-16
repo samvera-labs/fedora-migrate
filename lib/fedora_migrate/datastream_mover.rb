@@ -17,16 +17,24 @@ module FedoraMigrate
       if is_versionable?
         migrate_versions
       else
-        migrate_content
+        migrate_current
       end
     end
 
     private
 
+    # Reloading the target, otherwise #get_checksum is nil
+    def migrate_current
+      migrate_content
+      target.reload
+      verify
+    end
+
     def migrate_versions
       source.versions.each do |version|
         migrate_content(version)
         target.create_version
+        verify(version)
       end
     end
 
@@ -38,11 +46,21 @@ module FedoraMigrate
       target.mime_type = datastream.mimeType
       target.last_modified = datastream.createDate
       target.save
-      verify
-    end 
+    end
 
-    def verify
-      # TODO
+    def verify datastream=nil
+      datastream ||= source
+      target_checksum = get_checksum
+      unless datastream.checksum == target_checksum.split(/:/).last
+        raise StandardError, "Checksum mismatch"
+      end
+    end
+
+    # waiting on projecthydra/active_fedora#489
+    def get_checksum
+      predicate = RDF::URI.new("http://fedora.info/definitions/v4/rest-api#digest")
+      query = target.container_resource.query([RDF::URI.new(target.container_resource.content_path), predicate, nil])
+      query.first.object.object[:path]
     end
 
   end
