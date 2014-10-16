@@ -1,5 +1,6 @@
 require 'byebug'
 require 'fedora-migrate'
+require 'equivalent-xml/rspec_matchers'
 ENV['environment'] = "test"
 
 
@@ -30,5 +31,5 @@ RSpec.configure do |config|
 end
 
 def load_fixture file
-  File.open("spec/fixtures/#{file}")
+  File.open("spec/fixtures/datastreams/#{file}")
 end

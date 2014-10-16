@@ -9,6 +9,7 @@ module FedoraMigrate
   autoload :TripleConverter
   autoload :RDFDatastreamParser
   autoload :DatastreamMover
+  autoload :ObjectMover
 
   class << self
     attr_reader :fedora_config, :config_options, :source

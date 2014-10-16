@@ -14,7 +14,7 @@ namespace :fixtures do
   desc "Load Fedora3 fixtures for testing"
   task :load do
     repo = FedoraMigrate.source
-    Dir.glob("spec/fixtures/*.xml").each do |f|
+    Dir.glob("spec/fixtures/objects/*.xml").each do |f|
       fixture = File.open(f)
       repo.connection.ingest(file: fixture.read)
     end
