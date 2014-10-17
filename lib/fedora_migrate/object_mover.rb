@@ -1,12 +1,5 @@
 module FedoraMigrate
-  class ObjectMover
-
-    attr_accessor :source, :target
-
-    def initialize pid, model=nil
-      @source = FedoraMigrate.source.connection.find(pid)
-      @target = model
-    end
+  class ObjectMover < Mover
 
     def migrate
       prepare_target

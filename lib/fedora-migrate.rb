@@ -8,6 +8,7 @@ module FedoraMigrate
   autoload :RubydoraConnection
   autoload :TripleConverter
   autoload :RDFDatastreamParser
+  autoload :Mover
   autoload :DatastreamMover
   autoload :ObjectMover
 

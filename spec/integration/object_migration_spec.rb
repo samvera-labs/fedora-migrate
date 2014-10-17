@@ -12,12 +12,12 @@ describe "Migrating an object" do
     has_file_datastream "characterization", type: ActiveFedora::Datastream
   end
 
-  let(:pid)       { "sufia:rb68xc089" }
+  let(:source)    { FedoraMigrate.source.connection.find("sufia:rb68xc089")}
   let(:fits_xml)  { load_fixture("sufia-rb68xc089-characterization.xml").read }
 
   context "when the target model is provided" do
 
-    let(:mover)     { FedoraMigrate::ObjectMover.new pid, MigrationModel.new(pid: pid.split(/:/).last) }
+    let(:mover) { FedoraMigrate::ObjectMover.new source, MigrationModel.new }
     
     subject do
       mover.migrate
@@ -37,7 +37,7 @@ describe "Migrating an object" do
 
   context "when we have to determine the model" do
 
-    let(:mover) { FedoraMigrate::ObjectMover.new pid }
+    let(:mover) { FedoraMigrate::ObjectMover.new source }
 
     context "and it is defined" do
       subject do

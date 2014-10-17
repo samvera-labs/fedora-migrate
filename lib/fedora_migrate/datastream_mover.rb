@@ -1,7 +1,7 @@
 module FedoraMigrate
-  class DatastreamMover
+  class DatastreamMover < Mover
 
-    attr_accessor :source, :target, :versionable
+    attr_accessor :versionable
 
     def initialize args={}
       @source = args[:source]
