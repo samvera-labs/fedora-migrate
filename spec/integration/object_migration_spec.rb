@@ -12,7 +12,7 @@ describe "Migrating an object" do
     has_file_datastream "characterization", type: ActiveFedora::Datastream
   end
 
-  let(:source)    { FedoraMigrate.source.connection.find("sufia:rb68xc089")}
+  let(:source)    { FedoraMigrate.source.connection.find("sufia:rb68xc089") }
   let(:fits_xml)  { load_fixture("sufia-rb68xc089-characterization.xml").read }
 
   context "when the target model is provided" do

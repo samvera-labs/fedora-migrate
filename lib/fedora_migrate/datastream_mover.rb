@@ -3,18 +3,24 @@ module FedoraMigrate
 
     attr_accessor :versionable
 
-    def initialize args={}
-      @source = args[:source]
-      @target = args[:target]
-      @versionable = args[:versionable]
+    def post_initialize
+      raise StandardError, "You must supply a target" if target.nil?
     end
 
-    def is_versionable?
-      @versionable || false
+    def versionable?
+      versionable.nil? ? target_versionable? : versionable
+    end
+
+    def target_versionable?
+      if target.respond_to?(:versionable?)
+        target.versionable?
+      else 
+        false
+      end
     end
     
     def migrate
-      if is_versionable?
+      if versionable?
         migrate_versions
       else
         migrate_current

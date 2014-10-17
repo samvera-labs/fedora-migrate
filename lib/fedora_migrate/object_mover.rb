@@ -12,11 +12,7 @@ module FedoraMigrate
     private
 
     def datastream_mover ds
-      FedoraMigrate::DatastreamMover.new( 
-        source: source.datastreams[ds], 
-        target: target.datastreams[ds],
-        versionable: target.datastreams[ds].versionable?
-      )
+      FedoraMigrate::DatastreamMover.new( source.datastreams[ds], target.datastreams[ds])
     end
 
     def prepare_target

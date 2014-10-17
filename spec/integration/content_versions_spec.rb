@@ -11,18 +11,16 @@ describe "Versioned content" do
   end
 
   let(:mover) do
-    source = FedoraMigrate.find("sufia:rb68xc089").datastreams["content"]
-    obj = MigrationModel.new(pid: source.pid.split(/:/).last)
-    obj.save
-    target = obj.datastreams["content"]
-    FedoraMigrate::DatastreamMover.new( source: source, target: target)
+    FedoraMigrate::DatastreamMover.new(
+      FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"], 
+      MigrationModel.create.datastreams["content"]
+    )
   end
 
   context "with migrating versions" do
     subject do
-      mover.versionable = true
       mover.migrate
-      return mover.target
+      mover.target
     end
     it "should migrate all versions" do
       expect(subject.versions.count).to eql 4
@@ -35,8 +33,9 @@ describe "Versioned content" do
 
   context "without migrating versions" do
     subject do
+      mover.versionable = false
       mover.migrate
-      return mover.target
+      mover.target
     end
     it "should migrate only the most recent version" do
       expect(subject.versions.count).to eql 0

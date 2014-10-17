@@ -2,18 +2,38 @@ require 'spec_helper'
 
 describe FedoraMigrate::DatastreamMover do
 
-  it { is_expected.to respond_to :source }
-  it { is_expected.to respond_to :target }
-  it { is_expected.to respond_to :versionable }
+  describe "#post_initialize" do
+    specify "a target is required" do
+      expect{subject.new}.to raise_error(StandardError)
+    end
+  end
 
-  describe "#is_versionable?" do
-    let(:versionable_migrator) { FedoraMigrate::DatastreamMover.new(versionable: true) }
-    specify "defaults to false" do
-      expect(subject.is_versionable?).to be false
+  describe "#versionable?" do
+
+    let(:versionable_target)     { instance_double("Target", :versionable? => true) }
+    let(:non_versionable_target) { instance_double("Target", :versionable? => false) }
+
+    context "by default" do
+      subject { FedoraMigrate::DatastreamMover.new("foo","bar") }
+      it { is_expected.to_not be_versionable }
     end
-    specify "can be true" do
-       expect(versionable_migrator.is_versionable?).to be true
+    context "when the datastream is not versionable" do
+      subject { FedoraMigrate::DatastreamMover.new("source", non_versionable_target) }
+      it { is_expected.to_not be_versionable }
     end
+    context "when the datastream is versionable" do
+      subject { FedoraMigrate::DatastreamMover.new("source", versionable_target) }
+      it { is_expected.to be_versionable }
+      context "but you want to override that" do
+        subject do
+          mover = FedoraMigrate::DatastreamMover.new("source", versionable_target)
+          mover.versionable = false
+          return mover
+        end
+        it { is_expected.to_not be_versionable }
+      end
+    end
+  
   end
 
 end
