@@ -11,6 +11,7 @@ module FedoraMigrate
   autoload :Mover
   autoload :DatastreamMover
   autoload :ObjectMover
+  autoload :RDFDatastreamMover
 
   class << self
     attr_reader :fedora_config, :config_options, :source
