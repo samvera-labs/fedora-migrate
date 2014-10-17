@@ -1,18 +1,32 @@
 module FedoraMigrate
   class ObjectMover < Mover
 
+    attr_accessor :conversions
+
     def migrate
       prepare_target
-      target.datastreams.keys.each do |ds|
-        mover = datastream_mover(ds)
-        mover.migrate
-      end
+      migrate_content_datastreams
+      conversions.collect { |ds| convert_rdf_datastream(ds) }
+    end
+
+    def post_initialize
+      self.conversions = options.nil? ? [] : [options[:convert]].flatten
     end
 
     private
 
-    def datastream_mover ds
-      FedoraMigrate::DatastreamMover.new( source.datastreams[ds], target.datastreams[ds])
+    def migrate_content_datastreams
+      target.datastreams.keys.each do |ds|
+        mover = FedoraMigrate::DatastreamMover.new(source.datastreams[ds], target.datastreams[ds])
+        mover.migrate
+      end
+    end
+
+    def convert_rdf_datastream ds
+      if source.datastreams.keys.include?(ds)
+        mover = FedoraMigrate::RDFDatastreamMover.new(source.datastreams[ds], target)
+        mover.migrate
+      end
     end
 
     def prepare_target

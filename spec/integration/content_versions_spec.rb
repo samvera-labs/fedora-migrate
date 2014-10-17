@@ -2,18 +2,10 @@ require 'spec_helper'
 
 describe "Versioned content" do
 
-  class FileContentDatastream < ActiveFedora::Datastream
-    has_many_versions
-  end
-
-  class MigrationModel < ActiveFedora::Base
-    has_file_datastream "content", type: FileContentDatastream
-  end
-
   let(:mover) do
     FedoraMigrate::DatastreamMover.new(
       FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"], 
-      MigrationModel.create.datastreams["content"]
+      ExampleModel::VersionedContent.create.datastreams["content"]
     )
   end
 

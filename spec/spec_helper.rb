@@ -1,8 +1,8 @@
 require 'byebug'
 require 'fedora-migrate'
 require 'equivalent-xml/rspec_matchers'
+require 'support/example_model'
 ENV['environment'] = "test"
-
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -27,6 +27,8 @@ RSpec.configure do |config|
   end
 
   config.order = :random
+
+  config.include ExampleModel
 
 end
 
