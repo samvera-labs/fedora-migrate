@@ -19,11 +19,14 @@ RSpec.configure do |config|
   end
 
   # Have a clean slate for every test
-  # TODO: Blacklight not getting its configuration
   config.before(:each) do
-    ActiveFedora::Base.delete_all
-    #RSolr.connect.delete_by_query("*:*")
-    #RSolr.connect.commit
+    begin
+      ActiveFedora.fedora.connection.delete(ActiveFedora.fedora.base_path.sub('/', ''))
+    rescue StandardError
+    end
+    ActiveFedora.fedora.connection.put(ActiveFedora.fedora.base_path.sub('/', ''),"")
+    restore_spec_configuration if ActiveFedora::SolrService.instance.nil? || ActiveFedora::SolrService.instance.conn.nil?
+    ActiveFedora::SolrService.instance.conn.delete_by_query('*:*', params: {'softCommit' => true})
   end
 
   config.order = :random
