@@ -13,7 +13,7 @@ module FedoraMigrate
     end 
 
     def predicate
-      RDF::DC.send(dc_term_from_predicate)
+      ::RDF::DC.send(dc_term_from_predicate)
     end
 
     def verify_object

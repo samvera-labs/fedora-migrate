@@ -8,7 +8,7 @@ describe FedoraMigrate::TripleConverter do
       expect(subject.object).to eql "Sample Migration Object A"
     end
     specify "it parses the triple for the predicate" do
-      expect(subject.predicate).to eql RDF::DC.title
+      expect(subject.predicate).to eql ::RDF::DC.title
     end
   end
 

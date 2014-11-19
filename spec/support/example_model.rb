@@ -1,10 +1,10 @@
 module ExampleModel
 
   class RDFProperties < ActiveFedora::Base
-    property :title, predicate: RDF::DC.title do |index|
+    property :title, predicate: ::RDF::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
-    property :creator, predicate: RDF::DC.creator do |index|
+    property :creator, predicate: ::RDF::DC.creator do |index|
       index.as :stored_searchable, :facetable
     end
   end
@@ -24,7 +24,7 @@ module ExampleModel
   end
 
   class RDFObject < ActiveFedora::Base
-    property :title, predicate: RDF::DC.title do |index|
+    property :title, predicate: ::RDF::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
     has_file_datastream "content", type: VersionedDatastream
