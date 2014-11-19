@@ -15,7 +15,7 @@ describe "Migrating an object" do
     end
 
     it "should migrate the entire object" do
-      expect(subject.content.versions.count).to eql 4
+      expect(subject.content.versions.count).to eql 3
       expect(subject.thumbnail.mime_type).to eql "image/jpeg"
       expect(subject.thumbnail.versions.count).to eql 0
       expect(subject.characterization.content).to be_equivalent_to(fits_xml)
@@ -37,7 +37,7 @@ describe "Migrating an object" do
       end
 
       it "should migrate the entire object" do
-        expect(subject.content.versions.count).to eql 4
+        expect(subject.content.versions.count).to eql 3
         expect(subject.thumbnail.mime_type).to eql "image/jpeg"
         expect(subject.thumbnail.versions.count).to eql 0
         expect(subject.characterization.content).to be_equivalent_to(fits_xml)
@@ -68,7 +68,7 @@ describe "Migrating an object" do
       end
 
       it "should migrate the entire object" do
-        expect(subject.content.versions.count).to eql 4
+        expect(subject.content.versions.count).to eql 3
         expect(subject.thumbnail.mime_type).to eql "image/jpeg"
         expect(subject.thumbnail.versions.count).to eql 0
         expect(subject.characterization.content).to be_equivalent_to(fits_xml)

@@ -62,11 +62,8 @@ module FedoraMigrate
       end
     end
 
-    # waiting on projecthydra/active_fedora#489
     def get_checksum
-      predicate = RDF::URI.new("http://fedora.info/definitions/v4/rest-api#digest")
-      query = target.container_resource.query([RDF::URI.new(target.container_resource.content_path), predicate, nil])
-      query.first.object.object[:path]
+      target.digest.first.to_s
     end
 
   end

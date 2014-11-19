@@ -17,14 +17,14 @@ module FedoraMigrate
 
     def migrate_content_datastreams
       target.datastreams.keys.each do |ds|
-        mover = FedoraMigrate::DatastreamMover.new(source.datastreams[ds], target.datastreams[ds])
+        mover = FedoraMigrate::DatastreamMover.new(source.datastreams[ds.to_s], target.datastreams[ds.to_s])
         mover.migrate
       end
     end
 
     def convert_rdf_datastream ds
       if source.datastreams.keys.include?(ds)
-        mover = FedoraMigrate::RDFDatastreamMover.new(source.datastreams[ds], target)
+        mover = FedoraMigrate::RDFDatastreamMover.new(source.datastreams[ds.to_s], target)
         mover.migrate
       end
     end
@@ -36,7 +36,7 @@ module FedoraMigrate
 
     def create_target_model
       afmodel = source.models.map { |m| m if m.match(/afmodel/) }.compact.first.split(/:/).last
-      @target = afmodel.constantize.new(id: source.id.split(/:/).last)
+      @target = afmodel.constantize.new(id: source.pid.split(/:/).last)
     end
 
   end
