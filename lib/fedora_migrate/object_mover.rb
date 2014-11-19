@@ -36,7 +36,7 @@ module FedoraMigrate
 
     def create_target_model
       afmodel = source.models.map { |m| m if m.match(/afmodel/) }.compact.first.split(/:/).last
-      @target = afmodel.constantize.new(pid: source.pid.split(/:/).last)
+      @target = afmodel.constantize.new(id: source.id.split(/:/).last)
     end
 
   end

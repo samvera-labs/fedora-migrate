@@ -9,27 +9,27 @@ module ExampleModel
     end
   end
 
-  class VersionedDatastream < ActiveFedora::Datastream
+  class VersionedDatastream < ActiveFedora::File
     has_many_versions
   end
 
   class VersionedContent < ActiveFedora::Base
-    has_file_datastream "content", type: VersionedDatastream
+    contains "content", class_name: "ExampleModel::VersionedDatastream"
   end
 
   class MigrationObject < ActiveFedora::Base
-    has_file_datastream "content", type: VersionedDatastream
-    has_file_datastream "thumbnail", type: ActiveFedora::Datastream
-    has_file_datastream "characterization", type: ActiveFedora::Datastream
+    contains "content", class_name: "ExampleModel::VersionedDatastream"
+    contains "thumbnail", class_name: "ActiveFedora::File"
+    contains "characterization", class_name: "ActiveFedora::File"
   end
 
   class RDFObject < ActiveFedora::Base
     property :title, predicate: ::RDF::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
-    has_file_datastream "content", type: VersionedDatastream
-    has_file_datastream "thumbnail", type: ActiveFedora::Datastream
-    has_file_datastream "characterization", type: ActiveFedora::Datastream
+    contains "content", class_name: "ExampleModel::VersionedDatastream"
+    contains "thumbnail", class_name: "ActiveFedora::File"
+    contains "characterization", class_name: "ActiveFedora::File"
   end
 
 end

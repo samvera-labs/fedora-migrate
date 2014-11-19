@@ -38,8 +38,8 @@ module FedoraMigrate
     }
   end
 
-  def self.find pid
-    FedoraMigrate.source.connection.find(pid)
+  def self.find id
+    FedoraMigrate.source.connection.find(id)
   end
 
 end
