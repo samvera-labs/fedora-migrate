@@ -2,6 +2,7 @@ require 'byebug'
 require 'fedora-migrate'
 require 'equivalent-xml/rspec_matchers'
 require 'support/example_model'
+require 'active_fedora/cleaner'
 ENV['environment'] = "test"
 
 RSpec.configure do |config|
@@ -20,12 +21,7 @@ RSpec.configure do |config|
 
   # Have a clean slate for every test
   config.before(:each) do
-    begin
-      ActiveFedora.fedora.connection.delete(ActiveFedora.fedora.base_path.sub('/', ''))
-    rescue StandardError
-    end
-    ActiveFedora.fedora.connection.put(ActiveFedora.fedora.base_path.sub('/', ''),"")
-    restore_spec_configuration if ActiveFedora::SolrService.instance.nil? || ActiveFedora::SolrService.instance.conn.nil?
+    ActiveFedora::Cleaner.clean!
     ActiveFedora::SolrService.instance.conn.delete_by_query('*:*', params: {'softCommit' => true})
   end
 
