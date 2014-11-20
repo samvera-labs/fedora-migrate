@@ -23,6 +23,10 @@ describe "Migrating an object" do
       expect(subject).to be_kind_of ExampleModel::MigrationObject
     end
 
+    it "should migrate the object's permissions" do
+      expect(subject.edit_users).to include("jilluser@example.com")
+    end
+
   end
 
   context "when we have to determine the model" do

@@ -1,17 +1,36 @@
 require "fedora_migrate/version"
 require "active_support"
 require "active_fedora"
+require "hydra-core"
+
+# Shenanigans because we're not in a Rails environment and we need
+# Hydra::AccessControls
+Hydra::Engine.config.autoload_paths.each { |path| $LOAD_PATH.unshift path }
+HAC_DIR = Gem::Specification.find_by_name("hydra-access-controls").gem_dir
+require HAC_DIR+'/app/vocabularies/acl'
+require HAC_DIR+'/app/vocabularies/hydra/acl'
+require HAC_DIR+'/app/models/role_mapper'
+require HAC_DIR+'/app/models/ability'
+require HAC_DIR+'/app/models/hydra/access_controls/access_control_list'
+require HAC_DIR+'/app/models/hydra/access_controls/permission'
+require HAC_DIR+'/app/models/hydra/access_controls/embargo'
+require HAC_DIR+'/app/models/hydra/access_controls/lease'
+require HAC_DIR+'/app/services/hydra/lease_service'
+require HAC_DIR+'/app/services/hydra/embargo_service'
+require HAC_DIR+'/app/validators/hydra/future_date_validator'
 
 module FedoraMigrate
   extend ActiveSupport::Autoload
 
+  autoload :DatastreamMover
+  autoload :Mover
+  autoload :ObjectMover
+  autoload :PermissionsMover
+  autoload :RDFDatastreamMover
+  autoload :RDFDatastreamParser
+  autoload :RightsMetadata
   autoload :RubydoraConnection
   autoload :TripleConverter
-  autoload :RDFDatastreamParser
-  autoload :Mover
-  autoload :DatastreamMover
-  autoload :ObjectMover
-  autoload :RDFDatastreamMover
 
   class << self
     attr_reader :fedora_config, :config_options, :source
