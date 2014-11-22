@@ -31,6 +31,7 @@ module FedoraMigrate
   autoload :RightsMetadata
   autoload :RubydoraConnection
   autoload :TripleConverter
+  autoload :Permissions
 
   class << self
     attr_reader :fedora_config, :config_options, :source
