@@ -5,7 +5,7 @@ describe "Versioned content" do
   let(:mover) do
     FedoraMigrate::DatastreamMover.new(
       FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"], 
-      ExampleModel::VersionedContent.create.datastreams["content"]
+      ExampleModel::VersionedContent.create.attached_files["content"]
     )
   end
 
