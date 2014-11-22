@@ -3,8 +3,6 @@ module FedoraMigrate
 
     RIGHTS_DATASTREAM = "rightsMetadata".freeze
 
-    attr_accessor :conversions
-
     def migrate
       prepare_target
       migrate_content_datastreams
@@ -13,7 +11,7 @@ module FedoraMigrate
     end
 
     def post_initialize
-      self.conversions = options.nil? ? [] : [options[:convert]].flatten
+      conversion_options
     end
 
     private

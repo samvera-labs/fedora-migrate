@@ -1,7 +1,9 @@
 module FedoraMigrate
   class Mover
 
-    attr_accessor :target, :source, :options
+    include MigrationOptions
+
+    attr_accessor :target, :source
 
     def initialize *args
       @source = args[0]

@@ -23,15 +23,17 @@ module FedoraMigrate
   extend ActiveSupport::Autoload
 
   autoload :DatastreamMover
+  autoload :MigrationOptions
   autoload :Mover
   autoload :ObjectMover
+  autoload :Permissions
   autoload :PermissionsMover
   autoload :RDFDatastreamMover
   autoload :RDFDatastreamParser
+  autoload :RepositoryMigrator
   autoload :RightsMetadata
   autoload :RubydoraConnection
   autoload :TripleConverter
-  autoload :Permissions
 
   class << self
     attr_reader :fedora_config, :config_options, :source
@@ -60,6 +62,12 @@ module FedoraMigrate
 
   def self.find id
     FedoraMigrate.source.connection.find(id)
+  end
+
+  def self.migrate_repository args
+    migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
+    migrator.migrate
+    migrator.results
   end
 
 end
