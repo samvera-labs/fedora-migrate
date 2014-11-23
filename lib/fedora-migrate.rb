@@ -6,7 +6,12 @@ require "hydra-core"
 # Shenanigans because we're not in a Rails environment and we need
 # Hydra::AccessControls
 Hydra::Engine.config.autoload_paths.each { |path| $LOAD_PATH.unshift path }
-HAC_DIR = Gem::Specification.find_by_name("hydra-access-controls").gem_dir
+# in gem version 2.4, .find_by_name isn't pulling up gems given in the Gemfile
+# as opposed to those in the gemspec file.
+# This is a workaround:
+Gem::Specification.all.each do |g|
+  HAC_DIR = g.gem_dir if g.name.match("hydra-access-controls")
+end
 require HAC_DIR+'/app/vocabularies/acl'
 require HAC_DIR+'/app/vocabularies/hydra/acl'
 require HAC_DIR+'/app/models/role_mapper'
