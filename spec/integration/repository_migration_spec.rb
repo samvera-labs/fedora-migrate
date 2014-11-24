@@ -5,7 +5,9 @@ describe "Migrating the repository" do
   context "with all target objects are defined" do
 
     before do
+      Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
       class GenericFile < ExampleModel::MigrationObject
+        belongs_to :batch, predicate: ActiveFedora::RDF::RelsExt.isPartOf
         property :title, predicate: ::RDF::DC.title do |index|
           index.as :stored_searchable, :facetable
         end
@@ -13,9 +15,11 @@ describe "Migrating the repository" do
           index.as :stored_searchable, :facetable
         end
       end
-      
+
+      Object.send(:remove_const, :Batch) if defined?(Batch)      
       class Batch < ActiveFedora::Base
-        end
+        has_many :generic_files, predicate: ActiveFedora::RDF::RelsExt.isPartOf
+      end
     end
 
     after do
@@ -31,6 +35,7 @@ describe "Migrating the repository" do
       expect(GenericFile.find("xp68km39w").creator).to eql(["Adam Wead"])
       expect(GenericFile.all.count).to eql 4
       expect(Batch.all.count).to eql 1
+      expect(Batch.first.generic_files.count).to eql 2
     end
 
   end

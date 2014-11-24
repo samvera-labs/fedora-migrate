@@ -34,8 +34,17 @@ describe "Migrating an object" do
     let(:mover) { FedoraMigrate::ObjectMover.new source }
 
     context "and it is defined" do
+
+      before do
+        Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
+        class GenericFile < ActiveFedora::Base
+          has_file_datastream "content", type: ExampleModel::VersionedDatastream
+          has_file_datastream "thumbnail", type: ActiveFedora::Datastream
+          has_file_datastream "characterization", type: ActiveFedora::Datastream
+        end
+      end
+
       subject do
-        class GenericFile < ExampleModel::MigrationObject; end
         mover.migrate
         mover.target
       end

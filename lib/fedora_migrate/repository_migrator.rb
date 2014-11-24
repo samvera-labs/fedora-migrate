@@ -13,14 +13,21 @@ module FedoraMigrate
       conversion_options
     end
 
-    def migrate
+    def migrate_objects
       source_objects.each do |source|
-        results << { source.pid => FedoraMigrate::ObjectMover.new(source, nil, options).migrate }
+        results << { source.pid => [FedoraMigrate::ObjectMover.new(source, nil, options).migrate] }
+      end
+    end
+
+    # TODO: need a reporting mechanism for results
+    def migrate_relationships
+      source_objects.each do |source|
+        FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
       end
     end
 
     # TODO: pretty sure search results are paged so we'd need
-    # page throught all the results or only migrate a page
+    # page through all the results or only migrate a page
     # at a time.
     def get_source_objects
       FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact

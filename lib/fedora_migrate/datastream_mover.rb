@@ -44,7 +44,7 @@ module FedoraMigrate
       end
     end
 
-    # TODO: lastModified isn't the right place for the original creation date
+    # TODO: lastModified isn't the right place for the original creation date (issue #1)
     def migrate_content datastream=nil
       datastream ||= source
       target.content = datastream.content

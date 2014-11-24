@@ -35,6 +35,7 @@ module FedoraMigrate
   autoload :PermissionsMover
   autoload :RDFDatastreamMover
   autoload :RDFDatastreamParser
+  autoload :RelsExtDatastreamMover
   autoload :RepositoryMigrator
   autoload :RightsMetadata
   autoload :RubydoraConnection
@@ -71,7 +72,8 @@ module FedoraMigrate
 
   def self.migrate_repository args
     migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
-    migrator.migrate
+    migrator.migrate_objects
+    migrator.migrate_relationships
     migrator.results
   end
 
