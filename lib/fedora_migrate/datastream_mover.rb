@@ -4,7 +4,7 @@ module FedoraMigrate
     attr_accessor :versionable
 
     def post_initialize
-      raise StandardError, "You must supply a target" if target.nil?
+      raise FedoraMigrate::Errors::MigrationError, "You must supply a target" if target.nil?
     end
 
     def versionable?
@@ -54,11 +54,13 @@ module FedoraMigrate
       target.save
     end
 
+    # TODO: Reporting mechanism? If there isn't a checksum it defaults to "none"
     def verify datastream=nil
       datastream ||= source
       target_checksum = get_checksum
+      return true if datastream.checksum == "none"
       unless datastream.checksum == target_checksum.split(/:/).last
-        raise StandardError, "Checksum mismatch"
+        raise FedoraMigrate::Errors::MigrationError, "Checksum mismatch"
       end
     end
 

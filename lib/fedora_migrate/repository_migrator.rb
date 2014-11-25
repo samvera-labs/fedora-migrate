@@ -15,14 +15,26 @@ module FedoraMigrate
 
     def migrate_objects
       source_objects.each do |source|
-        results << { source.pid => [FedoraMigrate::ObjectMover.new(source, nil, options).migrate] }
+        begin
+          results << { source.pid => [FedoraMigrate::ObjectMover.new(source, nil, options).migrate] }
+        rescue NameError => e
+          results << { source.pid => e.to_s }
+        rescue FedoraMigrate::Errors::MigrationError => e
+          results << { source.pid => e.to_s }
+        end
       end
     end
 
     # TODO: need a reporting mechanism for results
     def migrate_relationships
       source_objects.each do |source|
-        FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+        begin
+          FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+        rescue FedoraMigrate::Errors::MigrationError => e
+          results << { source.pid => e.to_s }
+        rescue ActiveFedora::AssociationTypeMismatch => e
+          results << { source.pid => e.to_s }
+        end
       end
     end
 

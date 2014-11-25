@@ -2,6 +2,16 @@ require 'spec_helper'
 
 describe "Migrating the repository" do
 
+  context "when no target objects are defined" do
+    subject do
+      results = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
+      results.map { |e| e.values }.flatten
+    end
+    it { is_expected.to include("uninitialized constant GenericFile")}
+    it { is_expected.to include("uninitialized constant Batch")}
+    it { is_expected.to include("Source was not found in Fedora4. Did you migrated it?")}
+  end
+
   context "with all target objects are defined" do
 
     before do

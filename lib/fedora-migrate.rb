@@ -28,6 +28,7 @@ module FedoraMigrate
   extend ActiveSupport::Autoload
 
   autoload :DatastreamMover
+  autoload :Errors
   autoload :MigrationOptions
   autoload :Mover
   autoload :ObjectMover

@@ -46,13 +46,13 @@ module FedoraMigrate
     def retrieve_subject
       @subject = ActiveFedora::Base.find(source.pid.split(/:/).last)
     rescue ActiveFedora::ObjectNotFoundError
-      raise StandardError, "Source was not found in Fedora4. Did you migrated it?"
+      raise FedoraMigrate::Errors::MigrationError, "Source was not found in Fedora4. Did you migrated it?"
     end
 
     def retrieve_object id
       object = ActiveFedora::Base.find(id)
     rescue ActiveFedora::ObjectNotFoundError
-      raise StandardError, "Could not find object with id #{id}"
+      raise FedoraMigrate::Errors::MigrationError, "Could not find object with id #{id}"
     end
 
     def migrate_relationship predicate, object
