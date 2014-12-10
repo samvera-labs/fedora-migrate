@@ -15,11 +15,11 @@ describe "Migrating an object" do
     end
 
     it "should migrate the entire object" do
-      expect(subject.content.versions.count).to eql 3
+      expect(subject.content.versions.all.count).to eql 3
       expect(subject.thumbnail.mime_type).to eql "image/jpeg"
-      expect(subject.thumbnail.versions.count).to eql 0
+      expect(subject.thumbnail.versions.all.count).to eql 0
       expect(subject.characterization.content).to be_equivalent_to(fits_xml)
-      expect(subject.characterization.versions.count).to eql 0
+      expect(subject.characterization.versions.all.count).to eql 0
       expect(subject).to be_kind_of ExampleModel::MigrationObject
     end
 
@@ -50,11 +50,11 @@ describe "Migrating an object" do
       end
 
       it "should migrate the entire object" do
-        expect(subject.content.versions.count).to eql 3
+        expect(subject.content.versions.all.count).to eql 3
         expect(subject.thumbnail.mime_type).to eql "image/jpeg"
-        expect(subject.thumbnail.versions.count).to eql 0
+        expect(subject.thumbnail.versions.all.count).to eql 0
         expect(subject.characterization.content).to be_equivalent_to(fits_xml)
-        expect(subject.characterization.versions.count).to eql 0
+        expect(subject.characterization.versions.all.count).to eql 0
         expect(subject).to be_kind_of GenericFile
       end
     end
@@ -81,11 +81,11 @@ describe "Migrating an object" do
       end
 
       it "should migrate the entire object" do
-        expect(subject.content.versions.count).to eql 3
+        expect(subject.content.versions.all.count).to eql 3
         expect(subject.thumbnail.mime_type).to eql "image/jpeg"
-        expect(subject.thumbnail.versions.count).to eql 0
+        expect(subject.thumbnail.versions.all.count).to eql 0
         expect(subject.characterization.content).to be_equivalent_to(fits_xml)
-        expect(subject.characterization.versions.count).to eql 0
+        expect(subject.characterization.versions.all.count).to eql 0
         expect(subject).to be_kind_of ExampleModel::RDFObject
         expect(subject.title).to eql(["world.png"])
       end

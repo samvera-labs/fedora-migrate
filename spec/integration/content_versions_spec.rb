@@ -15,7 +15,7 @@ describe "Versioned content" do
       mover.target
     end
     it "should migrate all versions" do
-      expect(subject.versions.count).to eql 3
+      expect(subject.versions.all.count).to eql 3
     end
     it "should preserve metadata" do
       expect(subject.mime_type).to eql "image/png"
