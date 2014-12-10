@@ -38,9 +38,9 @@ describe "Migrating an object" do
       before do
         Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
         class GenericFile < ActiveFedora::Base
-          has_file_datastream "content", type: ExampleModel::VersionedDatastream
-          has_file_datastream "thumbnail", type: ActiveFedora::Datastream
-          has_file_datastream "characterization", type: ActiveFedora::Datastream
+          contains "content", class_name: "ExampleModel::VersionedDatastream"
+          contains "thumbnail", class_name: "ActiveFedora::Datastream"
+          contains "characterization", class_name: "ActiveFedora::Datastream"
         end
       end
 
