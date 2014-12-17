@@ -47,11 +47,16 @@ module FedoraMigrate
     # TODO: lastModified isn't the right place for the original creation date (issue #1)
     def migrate_content datastream=nil
       datastream ||= source
+      if datastream.content.nil?
+        Logger.info "datastream '#{datastream.dsid}' is nil. It's probably defined in the target but not present in the source"
+        return true
+      end
       target.content = datastream.content
       target.original_name = datastream.label
       target.mime_type = datastream.mimeType
       target.last_modified = datastream.createDate
-      target.save
+      Logger.info "#{target.inspect}"
+      save
     end
 
     # TODO: Reporting mechanism? If there isn't a checksum it defaults to "none"
@@ -60,7 +65,7 @@ module FedoraMigrate
       target_checksum = get_checksum
       return true if datastream.checksum == "none"
       unless datastream.checksum == target_checksum.split(/:/).last
-        raise FedoraMigrate::Errors::MigrationError, "Checksum mismatch"
+        Logger.fatal "expected #{datastream.dsid} #{datastream.checksumType} #{datastream.checksum} to match #{target_checksum}"
       end
     end
 

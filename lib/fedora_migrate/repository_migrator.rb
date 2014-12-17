@@ -15,6 +15,7 @@ module FedoraMigrate
 
     def migrate_objects
       source_objects.each do |source|
+        Logger.info "Migrating source object #{source.pid}"
         begin
           results << { source.pid => [FedoraMigrate::ObjectMover.new(source, nil, options).migrate] }
         rescue NameError => e
@@ -28,6 +29,7 @@ module FedoraMigrate
     # TODO: need a reporting mechanism for results
     def migrate_relationships
       source_objects.each do |source|
+        Logger.info "Migrating relationships for source object #{source.pid}"
         begin
           FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
         rescue FedoraMigrate::Errors::MigrationError => e

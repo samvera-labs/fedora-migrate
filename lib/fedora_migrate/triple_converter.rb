@@ -18,7 +18,7 @@ module FedoraMigrate
 
     def verify_object
       unless statement.match(/"/)
-        raise FedoraMigrate::Errors::MigrationError, "Expecting the object in the RDF triple statement to be separated with double-quotes"
+        Logger.warn "expected a RDF triple statement separated with double-quotes"
       end
     end
 

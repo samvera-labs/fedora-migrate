@@ -15,9 +15,10 @@ module FedoraMigrate
     # on the methods.
     def migrate
       FedoraMigrate::Permissions.instance_methods.each do |permission|
+        Logger.info "setting #{permission} to #{self.send(permission)}"
         target.send(permission.to_s+"=", self.send(permission))
       end
-      target.save
+      save
     end
 
 

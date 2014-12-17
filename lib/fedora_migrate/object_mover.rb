@@ -7,7 +7,7 @@ module FedoraMigrate
       prepare_target
       migrate_content_datastreams
       conversions.collect { |ds| convert_rdf_datastream(ds) }
-      migrate_permissions 
+      migrate_permissions
     end
 
     def post_initialize
@@ -39,11 +39,13 @@ module FedoraMigrate
 
     def prepare_target
       create_target_model if target.nil?
-      target.save
+      Logger.info "using target object #{target.id}"
+      save
     end
 
     def create_target_model
       afmodel = source.models.map { |m| m if m.match(/afmodel/) }.compact.first.split(/:/).last
+      Logger.info "found #{afmodel} in source object #{source.pid}"
       @target = afmodel.constantize.new(id: source.pid.split(/:/).last)
     end
 

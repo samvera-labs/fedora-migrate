@@ -20,9 +20,12 @@ describe FedoraMigrate::TripleConverter do
   end
 
   context "given a bad object / " do
+    before do
+      expect(FedoraMigrate::Logger).to receive(:warn)
+    end
     subject {  FedoraMigrate::TripleConverter.new( '<info:fedora/sufia:xp68km39w> <http://purl.org/dc/terms/title> Object not enclosed with quotes .') }
-    specify "it raises an error" do
-      expect{ subject.object }.to raise_error(StandardError)
+    specify "it returns nil" do      
+      expect(subject.object).to be nil      
     end
   end
 

@@ -14,6 +14,7 @@ namespace :fedora do
 
     desc "Empties out the Fedora4 repository"
     task reset: :environment do
+      FedoraMigrate::Logger.info "Removing all objects from the Fedora4 repository"
       ActiveFedora::Cleaner.clean!
     end
   end
