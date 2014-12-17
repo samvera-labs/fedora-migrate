@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "jettywrapper"
   spec.add_development_dependency "equivalent-xml"
-  spec.add_development_dependency "sufia", "~> 5.0.0.beta1"
+  spec.add_development_dependency "sufia", "~> 6.0.0.beta1"
 end
