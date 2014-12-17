@@ -3,6 +3,9 @@ require "active_support"
 require "active_fedora"
 require "hydra-core"
 
+# Loads rake tasks
+Dir[File.expand_path(File.join(File.dirname(__FILE__),"tasks/*.rake"))].each { |ext| load ext } if defined?(Rake)
+
 # Shenanigans because we're not in a Rails environment and we need
 # Hydra::AccessControls
 Hydra::Engine.config.autoload_paths.each { |path| $LOAD_PATH.unshift path }
