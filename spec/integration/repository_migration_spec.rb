@@ -3,6 +3,12 @@ require 'spec_helper'
 describe "Migrating the repository" do
 
   context "when no target objects are defined" do
+
+    before do
+      Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
+      Object.send(:remove_const, :Batch) if defined?(Batch)
+    end
+
     subject do
       results = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
       results.map { |e| e.values }.flatten
