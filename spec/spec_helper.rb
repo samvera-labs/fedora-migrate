@@ -1,4 +1,4 @@
-require 'byebug'
+require 'byebug' unless ENV['TRAVIS']
 require 'fedora-migrate'
 require 'equivalent-xml/rspec_matchers'
 require 'support/example_model'
