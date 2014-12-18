@@ -21,7 +21,11 @@ module FedoraMigrate
     def migrate
       relationships.each do |predicate, objects|
         unless objects.empty?
-          objects.collect { |object| migrate_relationship(predicate, object) }
+          if is_singular?(predicate.to_s)
+            objects.collect { |object| migrate_incomming_relationship(predicate, object) }
+          else
+            migrate_outgoing_relationship(predicate, objects)
+          end
         end
       end
     end
@@ -55,7 +59,9 @@ module FedoraMigrate
       raise FedoraMigrate::Errors::MigrationError, "Could not find object with id #{id}"
     end
 
-    def migrate_relationship predicate, object
+    # TODO: This is problematic and may not work in all situations
+    def migrate_incomming_relationship predicate, object
+      Logger.info "adding #{subject.id} to #{object.id} with predicate #{predicate.to_s}"
       object.reflections.each do |key, association|
         unless association.predicate.to_s.split(/#/).empty?
           if association.predicate.to_s.split(/#/).last.gsub(/is/,"").underscore == predicate.to_s
@@ -63,6 +69,21 @@ module FedoraMigrate
           end
         end
       end
+    end
+
+    # TODO: Very stinky... needs a different approach
+    def migrate_outgoing_relationship predicate, objects
+      Logger.info "adding #{objects.count.to_s} members to #{subject.id} with predicate #{predicate.to_s}"
+      subject.reflections.each do |key, association|
+        if key.to_s.match(/_ids$/)
+          subject.send(key.to_s+"=", objects.collect { |o| o.id })
+          subject.save
+        end
+      end
+    end
+
+    def is_singular?(str)
+      str.singularize == str
     end
 
   end
