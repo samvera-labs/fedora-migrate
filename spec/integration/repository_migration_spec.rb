@@ -45,7 +45,7 @@ describe "Migrating the repository" do
 
     it "should move every object" do
       results = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
-      expect(results.collect { |r| r.values}.flatten).to include(true, nil)
+      expect(results.collect { |r| r.values}.flatten.uniq).to eql [true]
       expect(GenericFile.find("rb68xc089").title).to eql(["world.png"])
       expect(GenericFile.find("xp68km39w").title).to eql(["Sample Migration Object A"])
       expect(GenericFile.find("xp68km39w").creator).to eql(["Adam Wead"])

@@ -32,6 +32,7 @@ module FedoraMigrate
 
   autoload :DatastreamMover
   autoload :Errors
+  autoload :Hooks
   autoload :Logger
   autoload :MigrationOptions
   autoload :Mover

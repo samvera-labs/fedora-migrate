@@ -2,6 +2,7 @@ module FedoraMigrate
   class Mover
 
     include MigrationOptions
+    include Hooks
 
     attr_accessor :target, :source
 

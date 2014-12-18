@@ -8,10 +8,24 @@ module FedoraMigrate
       migrate_content_datastreams
       conversions.collect { |ds| convert_rdf_datastream(ds) }
       migrate_permissions
+      complete_target
     end
 
     def post_initialize
       conversion_options
+      create_target_model if target.nil?
+    end
+
+    def prepare_target
+      Logger.info "running before_object_migration hooks"
+      before_object_migration
+      save
+    end
+
+    def complete_target
+      Logger.info "running after_object_migration hooks"
+      after_object_migration
+      save
     end
 
     private
@@ -35,12 +49,6 @@ module FedoraMigrate
         mover = FedoraMigrate::PermissionsMover.new(source.datastreams[RIGHTS_DATASTREAM], target)
         mover.migrate
       end
-    end
-
-    def prepare_target
-      create_target_model if target.nil?
-      Logger.info "using target object #{target.id}"
-      save
     end
 
     def create_target_model
