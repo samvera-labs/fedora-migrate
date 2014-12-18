@@ -57,8 +57,10 @@ module FedoraMigrate
 
     def migrate_relationship predicate, object
       object.reflections.each do |key, association|
-        if association.predicate.to_s.split(/#/).last.gsub(/is/,"").underscore == predicate.to_s
-          object.send(key.to_s) << subject
+        unless association.predicate.to_s.split(/#/).empty?
+          if association.predicate.to_s.split(/#/).last.gsub(/is/,"").underscore == predicate.to_s
+            object.send(key.to_s) << subject
+          end
         end
       end
     end
