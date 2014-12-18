@@ -33,6 +33,13 @@ namespace :fedora do
         options: {convert: "descMetadata"}
       ).migrate
     end
+
+    desc "Migrate the relationship for a single object"
+    task :relationship, [:pid] => :environment do |t, args|
+      raise "Please provide a pid, example changeme:1234" if args[:pid].nil?
+      FedoraMigrate::RelsExtDatastreamMover.new(FedoraMigrate.source.connection.find(args[:pid])).migrate
+    end
+  
   end
 
 end
