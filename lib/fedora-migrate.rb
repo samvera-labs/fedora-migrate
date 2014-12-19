@@ -32,6 +32,7 @@ module FedoraMigrate
 
   autoload :DatastreamMover
   autoload :Errors
+  autoload :FileConfigurator
   autoload :Hooks
   autoload :Logger
   autoload :MigrationOptions
@@ -49,38 +50,33 @@ module FedoraMigrate
 
   class << self
     attr_reader :fedora_config, :config_options, :source
+    attr_accessor :configurator
+
+    def fedora_config
+      @fedora_config ||= ActiveFedora::Config.new(configurator.fedora3_config)
+    end
+
+    def config_options
+      @config_options ||= "comming soon!"
+    end
+
+    def source
+      @source ||= FedoraMigrate::RubydoraConnection.new(fedora_config.credentials)
+    end 
+
+    def find id
+      FedoraMigrate.source.connection.find(id)
+    end
+
+    def migrate_repository args
+      migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
+      migrator.migrate_objects
+      migrator.migrate_relationships
+      migrator.results
+    end
+
   end
 
-  def self.fedora_config
-    @fedora_config ||= default_fedora_config
-  end
-
-  def self.config_options
-    @config_options ||= "comming soon!"
-  end
-
-  def self.source
-    @source ||= FedoraMigrate::RubydoraConnection.new(fedora_config)
-  end 
-
-  # TODO: move to separate class with yaml file for config
-  def self.default_fedora_config
-    {
-      url: "http://localhost:8983/fedora3",
-      user: "fedoraAdmin",
-      password: "fedoraAdmin"
-    }
-  end
-
-  def self.find id
-    FedoraMigrate.source.connection.find(id)
-  end
-
-  def self.migrate_repository args
-    migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
-    migrator.migrate_objects
-    migrator.migrate_relationships
-    migrator.results
-  end
+  self.configurator ||= FedoraMigrate::FileConfigurator.new
 
 end

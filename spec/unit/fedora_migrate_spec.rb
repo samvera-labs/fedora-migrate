@@ -6,7 +6,7 @@ describe FedoraMigrate do
 
     describe "configuration" do
       subject { FedoraMigrate.fedora_config }
-      it { is_expected.to include({url: "http://localhost:8983/fedora3"})}
+      it { is_expected.to be_kind_of ActiveFedora::Config }
     end
 
     describe "connection" do
