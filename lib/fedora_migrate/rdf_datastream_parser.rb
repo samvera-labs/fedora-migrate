@@ -12,10 +12,16 @@ module FedoraMigrate
     def parse
       datastream.split(/\n/).each do |s|
         triple = FedoraMigrate::TripleConverter.new(s)
-        statement = RDF::Statement(RDF::URI.new(subject), triple.predicate, triple.object)
-        Logger.info "converting: \n\t#{s} to \n\t#{statement}"
-        statements << statement
+        build_statement(triple) unless triple.predicate.nil?
       end
+    end
+
+    private
+
+    def build_statement triple
+      statement = RDF::Statement(RDF::URI.new(subject), triple.predicate, triple.object)
+      Logger.info "using converted rdf triple #{statement}"
+      statements << statement
     end
 
   end
