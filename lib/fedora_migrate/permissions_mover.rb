@@ -11,8 +11,6 @@ module FedoraMigrate
       end
     end
 
-    # TODO: create permissions module and call .each
-    # on the methods.
     def migrate
       FedoraMigrate::Permissions.instance_methods.each do |permission|
         Logger.info "setting #{permission} to #{self.send(permission)}"

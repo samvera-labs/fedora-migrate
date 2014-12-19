@@ -59,7 +59,7 @@ module FedoraMigrate
       save
     end
 
-    # TODO: Reporting mechanism? If there isn't a checksum it defaults to "none"
+    # TODO: Reporting mechanism? If there isn't a checksum it defaults to "none" (issue #4)
     def verify datastream=nil
       datastream ||= source
       target_checksum = get_checksum

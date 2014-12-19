@@ -26,7 +26,7 @@ module FedoraMigrate
       end
     end
 
-    # TODO: need a reporting mechanism for results
+    # TODO: need a reporting mechanism for results (issue #4)
     def migrate_relationships
       source_objects.each do |source|
         Logger.info "Migrating relationships for source object #{source.pid}"
@@ -40,9 +40,7 @@ module FedoraMigrate
       end
     end
 
-    # TODO: pretty sure search results are paged so we'd need
-    # page through all the results or only migrate a page
-    # at a time.
+    # TODO: page through all the objects (issue #6)
     def get_source_objects
       FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
     end

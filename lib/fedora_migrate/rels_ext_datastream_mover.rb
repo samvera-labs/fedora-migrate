@@ -59,7 +59,7 @@ module FedoraMigrate
       raise FedoraMigrate::Errors::MigrationError, "Could not find object with id #{id}"
     end
 
-    # TODO: This is problematic and may not work in all situations
+    # TODO: This is problematic and may not work in all situations (issue #7)
     def migrate_incomming_relationship predicate, object
       Logger.info "adding #{subject.id} to #{object.id} with predicate #{predicate.to_s}"
       object.reflections.each do |key, association|
@@ -71,7 +71,7 @@ module FedoraMigrate
       end
     end
 
-    # TODO: Very stinky... needs a different approach
+    # TODO: Very stinky... needs a different approach (issue #7)
     def migrate_outgoing_relationship predicate, objects
       Logger.info "adding #{objects.count.to_s} members to #{subject.id} with predicate #{predicate.to_s}"
       subject.reflections.each do |key, association|
