@@ -11,12 +11,17 @@ task ci: ['jetty:clean', 'jetty:start', 'fixtures:load', 'spec']
 
 namespace :fixtures do
 
-  desc "Load Fedora3 fixtures for testing"
+  desc "Load Fedora3 fixtures for testing; use FIXTURE_PATH= for your own"
   task :load do
     repo = FedoraMigrate.source
-    Dir.glob("spec/fixtures/objects/*.xml").each do |f|
+    path = ENV["FIXTURE_PATH"] || "spec/fixtures/objects" 
+    Dir.glob(File.join(path,"*.xml")).each do |f|
       fixture = File.open(f)
-      repo.connection.ingest(file: fixture.read)
+      begin
+        repo.connection.ingest(file: fixture.read)
+      rescue
+        puts "Failed to load #{fixture.path} (skipping)"
+      end
     end
   end
 
