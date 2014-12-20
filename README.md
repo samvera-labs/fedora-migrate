@@ -75,8 +75,8 @@ When the migrator finds an object in your Fedora3 repository that has the name _
 object `MyModel` in the context of your Hydra application. Only the datastreams, or files, that are defined in the model will
 be migrated from Fedora3. This means if your Fedora3 object has the datastream "special" but it is not in your Hydra
 model, it will not be migrated. DC datastreams are not migrated by default, and RELS-EXT and rightsMetdata datastreams are treated
-differently. See [FedoraMigrate::RelsExtDatastreamMover](rels_ext_datastream_mover.rb) and
-[FedoraMigrate::PermissionsMover](permissions_mover.rb).
+differently. See [FedoraMigrate::RelsExtDatastreamMover](lib/fedora_migrate/rels_ext_datastream_mover.rb) and
+[FedoraMigrate::PermissionsMover](lib/fedora_migrate/permissions_mover.rb).
 
 If your model contains a file or datastream that is versioned, then all versions of that datastream will be migrated from
 Fedora3. If the model does not define something as versioned, yet the Fedora3 datastream is versioned, then only the current
