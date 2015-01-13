@@ -5,12 +5,12 @@ describe FedoraMigrate::RepositoryMigrator do
   let(:namespace) { "sufia" }
 
   it { is_expected.to respond_to(:source_objects) }
-  it { is_expected.to respond_to(:results) }
+  it { is_expected.to respond_to(:failed) }
   it { is_expected.to respond_to(:namespace) }
 
-  describe "#results" do
-    specify "are initially empty" do
-      expect(subject.results).to eql([])
+  describe "#failed" do
+    specify "sets to zero" do
+      expect(subject.failed).to eql(0)
     end
   end
 

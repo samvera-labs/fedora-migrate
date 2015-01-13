@@ -9,13 +9,10 @@ describe "Migrating the repository" do
       Object.send(:remove_const, :Batch) if defined?(Batch)
     end
 
-    subject do
-      results = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
-      results.map { |e| e.values }.flatten
+    it "should log warnings" do
+      expect(FedoraMigrate::Logger).to receive(:warn).exactly(5).times
+      FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
     end
-    it { is_expected.to include("uninitialized constant GenericFile")}
-    it { is_expected.to include("uninitialized constant Batch")}
-    it { is_expected.to include("Source was not found in Fedora4. Did you migrated it?")}
   end
 
   context "with all target objects are defined" do
@@ -36,6 +33,8 @@ describe "Migrating the repository" do
       class Batch < ActiveFedora::Base
         has_many :generic_files, predicate: ActiveFedora::RDF::RelsExt.isPartOf
       end
+
+      FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
     end
 
     after do
@@ -43,9 +42,7 @@ describe "Migrating the repository" do
       Object.send(:remove_const, :Batch) if defined?(Batch)
     end
 
-    it "should move every object" do
-      results = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
-      expect(results.collect { |r| r.values}.flatten.uniq).to eql [true]
+    it "should move every object" do 
       expect(GenericFile.find("rb68xc089").title).to eql(["world.png"])
       expect(GenericFile.find("xp68km39w").title).to eql(["Sample Migration Object A"])
       expect(GenericFile.find("xp68km39w").creator).to eql(["Adam Wead"])

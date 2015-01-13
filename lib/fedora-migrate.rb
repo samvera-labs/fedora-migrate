@@ -51,7 +51,6 @@ module FedoraMigrate
       migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
       migrator.migrate_objects
       migrator.migrate_relationships
-      migrator.results
     end
 
   end

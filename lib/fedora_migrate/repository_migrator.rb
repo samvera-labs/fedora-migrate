@@ -3,39 +3,43 @@ module FedoraMigrate
 
     include MigrationOptions
 
-    attr_accessor :source_objects, :results, :namespace
+    attr_accessor :source_objects, :namespace, :failed
 
     def initialize namespace = nil, options = {}
       @namespace = namespace || repository_namespace
       @options = options
+      @failed = 0
       @source_objects = get_source_objects
-      @results = []
       conversion_options
     end
 
+    # TODO: need a reporting mechanism for results (issue #4)
     def migrate_objects
       source_objects.each do |source|
         Logger.info "Migrating source object #{source.pid}"
-        begin
-          results << { source.pid => [FedoraMigrate::ObjectMover.new(source, nil, options).migrate] }
+        result = begin
+          FedoraMigrate::ObjectMover.new(source, nil, options).migrate
         rescue NameError => e
-          results << { source.pid => e.to_s }
-        rescue FedoraMigrate::Errors::MigrationError => e
-          results << { source.pid => e.to_s }
+          "The most likely explanation is that your target is not defined: #{e.to_s}"
+        rescue StandardError => e
+          e.to_s
+        end
+        unless result == true
+          Logger.warn "#{source.pid} failed. #{result}" 
+          @failed = @failed + 1
         end
       end
     end
 
     # TODO: need a reporting mechanism for results (issue #4)
     def migrate_relationships
+      return "Reltionship migration halted because #{failed.to_s} objects didn't migrate successfully." if failed > 0
       source_objects.each do |source|
         Logger.info "Migrating relationships for source object #{source.pid}"
         begin
           FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
-        rescue FedoraMigrate::Errors::MigrationError => e
-          results << { source.pid => e.to_s }
-        rescue ActiveFedora::AssociationTypeMismatch => e
-          results << { source.pid => e.to_s }
+        rescue StandardError => e
+          Logger.warn "#{source.pid} relationship migration failed. #{e.to_s}"
         end
       end
     end
