@@ -9,6 +9,12 @@ describe "Versioned content" do
     )
   end
 
+  it "calls the before and after hooks when migrating" do
+    expect(mover).to receive(:before_datastream_migration)
+    expect(mover).to receive(:after_datastream_migration)
+    mover.migrate
+  end
+
   context "with migrating versions" do
     subject do
       mover.migrate

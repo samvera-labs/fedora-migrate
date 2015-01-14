@@ -3,8 +3,10 @@ module FedoraMigrate
 
     def migrate
       Logger.info "converting datastream '#{source.dsid}' to RDF"
+      before_rdf_datastream_migration
       parse_rdf_triples
       force_attribute_change
+      after_rdf_datastream_migration
       save
     end
 

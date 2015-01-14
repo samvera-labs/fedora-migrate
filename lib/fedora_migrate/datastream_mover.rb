@@ -20,14 +20,20 @@ module FedoraMigrate
     end
     
     def migrate
+      before_datastream_migration
+      migrate_datastream
+      after_datastream_migration
+    end
+
+    private
+
+    def migrate_datastream
       if versionable?
         migrate_versions
       else
         migrate_current
       end
     end
-
-    private
 
     # Reloading the target, otherwise #get_checksum is nil
     def migrate_current

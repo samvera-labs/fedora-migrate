@@ -9,14 +9,22 @@ describe "Mirating RDF terms" do
     )
   end
 
-  subject do
+  it "should call the before and after hooks when migrating" do
+    expect(mover).to receive(:before_rdf_datastream_migration)
+    expect(mover).to receive(:after_rdf_datastream_migration)
     mover.migrate
-    mover.target
   end
 
-  it "adds each triple to a new Fedora4 resource" do
-    expect(subject.title.first).to eql "Sample Migration Object A"
-    expect(subject.creator.first).to eql "Adam Wead"
+  describe "using triples" do
+    subject do
+      mover.migrate
+      mover.target
+    end
+
+    it "adds each triple to a new Fedora4 resource" do
+      expect(subject.title.first).to eql "Sample Migration Object A"
+      expect(subject.creator.first).to eql "Adam Wead"
+    end
   end
 
 end
