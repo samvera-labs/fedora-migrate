@@ -50,7 +50,6 @@ module FedoraMigrate
       end
     end
 
-    # TODO: lastModified isn't the right place for the original creation date (issue #1)
     def migrate_content datastream=nil
       datastream ||= source
       if datastream.content.nil?
@@ -60,7 +59,6 @@ module FedoraMigrate
       target.content = datastream.content
       target.original_name = datastream.label
       target.mime_type = datastream.mimeType
-      target.last_modified = datastream.createDate
       Logger.info "#{target.inspect}"
       save
     end
