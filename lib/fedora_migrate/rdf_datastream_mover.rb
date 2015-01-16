@@ -1,13 +1,6 @@
 module FedoraMigrate
   class RDFDatastreamMover < Mover
 
-    attr_accessor :parser
-
-    def post_initialize
-      @parser = FedoraMigrate::RDFDatastreamParser.new(target.uri, source.content)
-      @parser.parse
-    end
-
     def migrate
       Logger.info "converting datastream '#{source.dsid}' to RDF"
       before_rdf_datastream_migration
@@ -17,10 +10,7 @@ module FedoraMigrate
     end
 
     def migrate_rdf_triples
-      parser.statements.each do |statement|
-        apply_term(statement)
-      end
-      force_attribute_change
+      target.resource << RDF::Reader.for(:ntriples).new(source.content.gsub(/<.+#{source.pid}>/,"<#{target.uri}>"))
     end
 
     private

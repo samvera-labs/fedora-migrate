@@ -1,2 +1,0 @@
-<info:fedora/sufia:xp68km39w> <http://purl.org/dc/terms/title> "Sample Migration Object A" .
-<info:fedora/sufia:xp68km39w> <http://purl.org/dc/terms/creator> "Adam Wead" .
