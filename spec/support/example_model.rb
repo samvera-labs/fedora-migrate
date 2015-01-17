@@ -48,6 +48,9 @@ module ExampleModel
     property :title, predicate: ::RDF::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
+
+    property :description, predicate: ::RDF::DC.description
+
     contains "content", class_name: "ExampleModel::VersionedDatastream"
     contains "thumbnail", class_name: "ActiveFedora::File"
     contains "characterization", class_name: "ActiveFedora::File"
