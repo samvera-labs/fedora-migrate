@@ -14,7 +14,7 @@ namespace :fixtures do
   desc "Load Fedora3 fixtures for testing; use FIXTURE_PATH= for your own"
   task :load do
     repo = FedoraMigrate.source
-    path = ENV["FIXTURE_PATH"] || "spec/fixtures/objects" 
+    path = ENV["FIXTURE_PATH"] || "spec/fixtures/objects"
     Dir.glob(File.join(path,"*.xml")).each do |f|
       fixture = File.open(f)
       begin

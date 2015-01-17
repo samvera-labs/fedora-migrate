@@ -107,6 +107,19 @@ describe "Migrating an object" do
       end
     end
 
+    context "with RDF errors" do
+      let(:problem_source) { FedoraMigrate.source.connection.find("scholarsphere:sf2686078") }
+      let(:mover) { FedoraMigrate::ObjectMover.new(problem_source, ExampleModel::RDFObject.new, {convert: "descMetadata"}) }
+      subject do
+        mover.migrate
+        mover.target
+      end
+
+      it "should migrate the content" do
+        expect(subject.title).to eql([" The \"Value Added\" in Editorial Acquisitions.pdf"])
+      end
+    end
+
   end
 
 end

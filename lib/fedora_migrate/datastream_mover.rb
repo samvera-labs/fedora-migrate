@@ -14,11 +14,11 @@ module FedoraMigrate
     def target_versionable?
       if target.respond_to?(:versionable?)
         target.versionable?
-      else 
+      else
         false
       end
     end
-    
+
     def migrate
       before_datastream_migration
       migrate_datastream
@@ -57,7 +57,7 @@ module FedoraMigrate
         return true
       end
       target.content = datastream.content
-      target.original_name = datastream.label
+      target.original_name = datastream.label.try(:gsub, /"/, '\"')
       target.mime_type = datastream.mimeType
       Logger.info "#{target.inspect}"
       save
