@@ -20,12 +20,13 @@ module FedoraMigrate
         result = begin
           FedoraMigrate::ObjectMover.new(source, nil, options).migrate
         rescue NameError => e
-          "The most likely explanation is that your target is not defined: #{e.to_s}"
+          "The most likely explanation is that your target is not defined"
+          error_message(e)
         rescue StandardError => e
-          e.to_s
+          error_message(e)
         end
         unless result == true
-          Logger.warn "#{source.pid} failed. #{result}" 
+          Logger.warn "#{source.pid} failed.\n#{result}" 
           @failed = @failed + 1
         end
       end
@@ -39,7 +40,7 @@ module FedoraMigrate
         begin
           FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
         rescue StandardError => e
-          Logger.warn "#{source.pid} relationship migration failed. #{e.to_s}"
+          Logger.warn "#{source.pid} relationship migration failed.\n#{error_message(e)}"
         end
       end
     end
@@ -50,6 +51,10 @@ module FedoraMigrate
     end
 
     private
+
+    def error_message e
+      [e.inspect, e.backtrace.join("\n\t")].join("\n\t")
+    end
 
     def repository_namespace
       FedoraMigrate.source.connection.repository_profile["repositoryPID"]["repositoryPID"].split(/:/).first.strip
