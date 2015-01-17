@@ -69,7 +69,7 @@ module FedoraMigrate
       target_checksum = get_checksum
       return true if datastream.checksum == "none"
       unless datastream.checksum == target_checksum.split(/:/).last
-        Logger.fatal "expected #{datastream.dsid} #{datastream.checksumType} #{datastream.checksum} to match #{target_checksum}"
+        Logger.warn "expected #{datastream.dsid} #{datastream.checksumType} #{datastream.checksum} to match #{target_checksum}"
       end
     end
 
