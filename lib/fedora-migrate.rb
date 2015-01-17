@@ -25,6 +25,7 @@ module FedoraMigrate
   autoload :RepositoryMigrator
   autoload :RightsMetadata
   autoload :RubydoraConnection
+  autoload :TargetConstructor
   autoload :TripleConverter
 
   class << self

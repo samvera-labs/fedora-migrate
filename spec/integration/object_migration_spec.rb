@@ -64,7 +64,7 @@ describe "Migrating an object" do
         Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
       end
       it "should fail" do
-        expect{mover.migrate}.to raise_error(NameError)
+        expect{mover.migrate}.to raise_error(FedoraMigrate::Errors::MigrationError)
       end
     end
 

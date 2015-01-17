@@ -55,9 +55,9 @@ module FedoraMigrate
     end
 
     def create_target_model
-      afmodel = source.models.map { |m| m if m.match(/afmodel/) }.compact.first.split(/:/).last
-      Logger.info "found #{afmodel} in source object #{source.pid}"
-      @target = afmodel.constantize.new(id: source.pid.split(/:/).last)
+      builder = FedoraMigrate::TargetConstructor.new(@source.models).build
+      raise FedoraMigrate::Errors::MigrationError, "No qualified targets found in #{@source.pid}" if builder.target.nil?
+      @target = builder.target.new(id: @source.pid.split(/:/).last)
     end
 
   end
