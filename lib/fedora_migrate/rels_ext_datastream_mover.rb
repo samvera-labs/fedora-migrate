@@ -1,50 +1,55 @@
-require 'rubydora'
 module FedoraMigrate
   class RelsExtDatastreamMover < Mover
 
-    attr_accessor :relationships, :ng_xml, :subject
-
-    RELS_EXT = Rubydora::RelationshipsMixin::RELS_EXT
     RELS_EXT_DATASTREAM = "RELS-EXT".freeze
 
-    def post_initialize
-      retrieve_subject
-      @relationships ||= {}
-      @ng_xml = Nokogiri::XML(source.datastreams[RELS_EXT_DATASTREAM].content)
-      parse_relationships if has_relationships?
-    end
-
-    def has_relationships?
-      source.datastreams.keys.include?(RELS_EXT_DATASTREAM)
-    end
-
     def migrate
-      relationships.each do |predicate, objects|
-        unless objects.empty?
-          if is_singular?(predicate.to_s)
-            objects.collect { |object| migrate_incomming_relationship(predicate, object) }
-          else
-            migrate_outgoing_relationship(predicate, objects)
-          end
-        end
+      statements.each do |statement|
+        subject.ldp_source.graph << [subject.rdf_subject, migrate_predicate(statement.predicate), migrate_object(statement.object)]
       end
+      subject.ldp_source.update
+      update_index
     end
 
     private
 
-    # because of projecthydra/rubydora#90 
-    def parse_relationships
-      RELS_EXT.keys.each do |key|
-        query = "//ns0:"+RELS_EXT[key].split(/#/).last
-        relationships[key.to_sym] = query_results(query)
+    def update_index
+      subject.reload
+      subject.update_index
+    end
+
+    def graph
+      @graph ||= RDF::Graph.new { |g| g.from_rdfxml(rels_ext_content) }
+    end
+
+    def rels_ext_content
+      source.datastreams[RELS_EXT_DATASTREAM].content
+    end
+
+    # Migrate any predicates from ActiveFedora::RDF::Fcrepo::System to ActiveFedora::RDF::RelsExt
+    def migrate_predicate(fc3_uri)
+      if RDF::Vocabulary.find(fc3_uri) == ActiveFedora::RDF::Fcrepo::System
+        ActiveFedora::RDF::RelsExt.send(fc3_uri.to_s.split(/#/).last)
+      else
+        fc3_uri
       end
     end
 
-    def query_results query, results = Array.new
-      ng_xml.xpath(query).each do |predicate|
-        results << retrieve_object(predicate.attribute("resource").text.split(/:/).last)
-      end
-      return results
+    def migrate_object(fc3_uri)
+      RDF::URI.new(ActiveFedora::Base.id_to_uri(id_component(fc3_uri)))
+    end
+
+    def id_component(uri)
+      uri.to_s.split(/:/).last
+    end
+
+    def subject
+      @subject ||= retrieve_subject
+    end
+
+    # All the graph statements except hasModel
+    def statements
+      graph.statements.reject { |stmt| stmt.predicate == ActiveFedora::RDF::Fcrepo::Model.hasModel }
     end
 
     def retrieve_subject
@@ -52,39 +57,5 @@ module FedoraMigrate
     rescue ActiveFedora::ObjectNotFoundError
       raise FedoraMigrate::Errors::MigrationError, "Source was not found in Fedora4. Did you migrated it?"
     end
-
-    def retrieve_object id
-      object = ActiveFedora::Base.find(id)
-    rescue ActiveFedora::ObjectNotFoundError
-      raise FedoraMigrate::Errors::MigrationError, "Could not find object with id #{id}"
-    end
-
-    # TODO: This is problematic and may not work in all situations (issue #7)
-    def migrate_incomming_relationship predicate, object
-      Logger.info "adding #{subject.id} to #{object.id} with predicate #{predicate.to_s}"
-      object.reflections.each do |key, association|
-        unless association.predicate.to_s.split(/#/).empty?
-          if association.predicate.to_s.split(/#/).last.gsub(/is/,"").underscore == predicate.to_s
-            object.send(key.to_s) << subject
-          end
-        end
-      end
-    end
-
-    # TODO: Very stinky... needs a different approach (issue #7)
-    def migrate_outgoing_relationship predicate, objects
-      Logger.info "adding #{objects.count.to_s} members to #{subject.id} with predicate #{predicate.to_s}"
-      subject.reflections.each do |key, association|
-        if key.to_s.match(/_ids$/)
-          subject.send(key.to_s+"=", objects.collect { |o| o.id })
-          subject.save
-        end
-      end
-    end
-
-    def is_singular?(str)
-      str.singularize == str
-    end
-
   end
 end
