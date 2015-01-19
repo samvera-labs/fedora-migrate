@@ -1,6 +1,8 @@
 module FedoraMigrate
   class DatastreamMover < Mover
 
+    include DatastreamVerification
+
     attr_accessor :versionable
 
     def post_initialize
@@ -35,18 +37,18 @@ module FedoraMigrate
       end
     end
 
-    # Reloading the target, otherwise #get_checksum is nil
+    # Reload the target, otherwise the checksum is nil
     def migrate_current
       migrate_content
       target.reload
-      verify
+      valid?
     end
 
     def migrate_versions
       source.versions.each do |version|
         migrate_content(version)
         target.create_version
-        verify(version)
+        valid?(version)
       end
     end
 
@@ -61,20 +63,6 @@ module FedoraMigrate
       target.mime_type = datastream.mimeType
       Logger.info "#{target.inspect}"
       save
-    end
-
-    # TODO: Reporting mechanism? If there isn't a checksum it defaults to "none" (issue #4)
-    def verify datastream=nil
-      datastream ||= source
-      target_checksum = get_checksum
-      return true if datastream.checksum == "none"
-      unless datastream.checksum == target_checksum.split(/:/).last
-        Logger.warn "expected #{datastream.dsid} #{datastream.checksumType} #{datastream.checksum} to match #{target_checksum}"
-      end
-    end
-
-    def get_checksum
-      target.digest.first.to_s
     end
 
   end
