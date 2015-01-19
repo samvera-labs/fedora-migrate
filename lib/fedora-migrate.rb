@@ -42,7 +42,7 @@ module FedoraMigrate
 
     def source
       @source ||= FedoraMigrate::RubydoraConnection.new(fedora_config.credentials)
-    end 
+    end
 
     def find id
       FedoraMigrate.source.connection.find(id)

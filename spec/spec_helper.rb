@@ -1,12 +1,19 @@
 require 'byebug' unless ENV['TRAVIS']
+ENV['environment'] = "test"
+
 require 'fedora-migrate'
 require 'equivalent-xml/rspec_matchers'
 require 'support/example_model'
 require 'active_fedora/cleaner'
-ENV['environment'] = "test"
 
+require 'http_logger'
 ActiveFedora::Base.logger = Logger.new(STDERR)
 ActiveFedora::Base.logger.level = Logger::WARN
+
+# HttpLogger.logger = Logger.new(STDOUT)
+# HttpLogger.ignore = [/(127\.0\.0\.1|localhost):8983\/fedora/]
+# HttpLogger.colorize = false
+# HttpLogger.log_headers = true
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

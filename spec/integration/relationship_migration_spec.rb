@@ -21,7 +21,7 @@ describe "Migrating objects with relationships" do
   after :all do
     Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
   end
-  
+
   let(:parent_source) { FedoraMigrate.source.connection.find("sufia:rb68xc09k") }
   let(:child_source)  { FedoraMigrate.source.connection.find("sufia:rb68xc11m") }
 

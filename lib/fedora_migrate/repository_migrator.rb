@@ -26,7 +26,7 @@ module FedoraMigrate
           error_message(e)
         end
         unless result == true
-          Logger.warn "#{source.pid} failed.\n#{result}" 
+          Logger.warn "#{source.pid} failed.\n#{result}"
           @failed = @failed + 1
         end
       end
