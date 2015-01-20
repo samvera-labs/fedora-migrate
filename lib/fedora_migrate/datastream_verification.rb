@@ -3,9 +3,9 @@ module FedoraMigrate::DatastreamVerification
   attr_accessor :datastream
 
   def valid? datastream=nil
-    @datastream = datastream || source
+    @datastream = datastream || @source
     check = has_no_checksum? || has_matching_checksums? || content_equivalent?
-    FedoraMigrate::Logger.warn "#{source.pid} datastream #{datastream.dsid} validation failed" unless check
+    FedoraMigrate::Logger.warn "#{@datastream.pid} datastream #{@datastream.dsid} validation failed" unless check
     check
   end
 
@@ -37,7 +37,7 @@ module FedoraMigrate::DatastreamVerification
 
   # In some cases, the data is in ldp_source but target.content is empty, so we check both places
   def target_content
-    target.content || target.ldp_source.content
+    target.content.empty? ? target.ldp_source.content : target.content
   end
 
 end

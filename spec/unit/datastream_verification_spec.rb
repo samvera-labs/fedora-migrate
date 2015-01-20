@@ -6,6 +6,7 @@ describe FedoraMigrate::DatastreamVerification do
     include FedoraMigrate::DatastreamVerification
     def initialize datastream
       @datastream = datastream
+      @source = datastream
     end
   end
 
@@ -33,6 +34,16 @@ describe FedoraMigrate::DatastreamVerification do
       TestSubject.new(mock_source)
     end
     it { is_expected.to be_content_equivalent }
+  end
+
+  context "with an invalid datastream" do
+    let(:mock_source) { double("Datastream", checksum: "bad", mimeType: "binary", content: "XXXXXX", dsid: "content", pid: "abc123") }
+    subject do
+      expect_any_instance_of(TestSubject).to receive(:target_checksum).once.and_return("foo")
+      expect(FedoraMigrate::Logger).to receive(:warn).once
+      TestSubject.new(mock_source)
+    end
+    it { is_expected.to_not be_valid }
   end
 
 end
