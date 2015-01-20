@@ -41,10 +41,14 @@ module FedoraMigrate
     end
 
     def convert_rdf_datastream ds
-      if source.datastreams.keys.include?(ds)
-        mover = FedoraMigrate::RDFDatastreamMover.new(source.datastreams[ds.to_s], target)
+      if source.datastreams.key?(ds)
+        mover = FedoraMigrate::RDFDatastreamMover.new(datastream_content(ds), target)
         mover.migrate
       end
+    end
+
+    def datastream_content(dsid)
+      source.datastreams[dsid.to_s]
     end
 
     def migrate_permissions
@@ -61,5 +65,4 @@ module FedoraMigrate
     end
 
   end
-  
 end

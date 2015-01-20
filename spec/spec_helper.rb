@@ -11,7 +11,7 @@ ActiveFedora::Base.logger = Logger.new(STDERR)
 ActiveFedora::Base.logger.level = Logger::WARN
 
 # HttpLogger.logger = Logger.new(STDOUT)
-# HttpLogger.ignore = [/(127\.0\.0\.1|localhost):8983\/fedora/]
+# HttpLogger.ignore = [/(127\.0\.0\.1|localhost):8983\/solr/]
 # HttpLogger.colorize = false
 # HttpLogger.log_headers = true
 
