@@ -1,5 +1,5 @@
 require 'byebug' unless ENV['TRAVIS']
-ENV['environment'] = "test"
+ENV['RAILS_ENV'] = "test"
 
 require 'fedora-migrate'
 require 'equivalent-xml/rspec_matchers'

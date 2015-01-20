@@ -8,7 +8,7 @@ describe "Migrating an object" do
   context "when the target model is provided" do
 
     let(:mover) { FedoraMigrate::ObjectMover.new source, ExampleModel::MigrationObject.new }
-    
+
     subject do
       mover.migrate
       mover.target
@@ -74,7 +74,7 @@ describe "Migrating an object" do
 
     context "and we want to convert it to a provided model" do
       let(:mover) { FedoraMigrate::ObjectMover.new(source, ExampleModel::RDFObject.new, {convert: "descMetadata"}) }
-    
+
       subject do
         mover.migrate
         mover.target
@@ -92,11 +92,25 @@ describe "Migrating an object" do
 
     end
 
+    context "with ISO-8859-1 characters" do
+      let(:problem_source) { FedoraMigrate.source.connection.find("scholarsphere:5712mc568") }
+      let(:mover) { FedoraMigrate::ObjectMover.new(problem_source, ExampleModel::RDFObject.new, {convert: "descMetadata"}) }
+      subject do
+        mover.migrate
+        mover.target
+      end
+
+      it "should migrate the content" do
+        expect(subject.description.first).to match(/^The relationship between school administrators and music teachers/)
+      end
+
+    end
+
     context "and we want to convert multiple datastreas" do
 
-      # Need a fixture with two different datastreams for this test to be more effective      
+      # Need a fixture with two different datastreams for this test to be more effective
       let(:mover) { FedoraMigrate::ObjectMover.new(source, ExampleModel::RDFObject.new, {convert: ["descMetadata", "descMetadata"]}) }
-    
+
       subject do
         mover.migrate
         mover.target
