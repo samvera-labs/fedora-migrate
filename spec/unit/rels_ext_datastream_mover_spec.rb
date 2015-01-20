@@ -5,7 +5,7 @@ describe FedoraMigrate::RelsExtDatastreamMover do
   let(:mover) { FedoraMigrate::RelsExtDatastreamMover.new(source) }
   let(:source) { FedoraMigrate.source.connection.find("sufia:rb68xc11m") }
   let(:result) { ActiveFedora::Base.new(id: 'rb68xc11m') }
-  let(:query) { result.ldp_source.graph.query([nil, ActiveFedora::RDF::RelsExt.isPartOf, nil]) }
+  let(:query) { result.ldp_source.graph.query([nil, ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf, nil]) }
   before do
     allow(mover).to receive(:retrieve_subject).and_return(result)
     expect(result.ldp_source).to receive(:update)

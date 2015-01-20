@@ -6,3 +6,5 @@ gemspec
 gem 'byebug'
 gem 'pry'
 gem 'http_logger'
+
+gem 'active-fedora', github: 'projecthydra/active_fedora'
