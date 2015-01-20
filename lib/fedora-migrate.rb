@@ -10,6 +10,7 @@ module FedoraMigrate
   extend ActiveSupport::Autoload
 
   autoload :DatastreamMover
+  autoload :DatastreamVerification
   autoload :Errors
   autoload :FileConfigurator
   autoload :Hooks
