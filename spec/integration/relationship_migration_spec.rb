@@ -4,7 +4,7 @@ describe "Migrating objects with relationships" do
 
   before :all do
     class GenericFile < ActiveFedora::Base
-      belongs_to :batch, predicate: ActiveFedora::RDF::RelsExt.isPartOf
+      belongs_to :batch, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
       property :title, predicate: ::RDF::DC.title do |index|
         index.as :stored_searchable, :facetable
       end
@@ -14,7 +14,7 @@ describe "Migrating objects with relationships" do
     end
 
     class Batch < ActiveFedora::Base
-      has_many :generic_files, predicate: ActiveFedora::RDF::RelsExt.isPartOf
+      has_many :generic_files, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
     end
   end
 

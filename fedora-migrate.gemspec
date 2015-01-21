@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "jettywrapper"
-  spec.add_development_dependency "sufia", "~> 6.0.0.beta1"
+  spec.add_development_dependency "hydra-collections", "~> 4.0.0.rc2"
 end

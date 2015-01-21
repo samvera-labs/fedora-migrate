@@ -35,7 +35,7 @@ describe FedoraMigrate::RepositoryMigrator do
       end
       it "should exclude fedora-system objects" do
         expect(subject.source_objects).to_not include("fedora-system:ContentModel-3.0")
-        expect(subject.source_objects.count).to eql 5
+        expect(subject.source_objects.count).to eql 9
       end
     end
   end

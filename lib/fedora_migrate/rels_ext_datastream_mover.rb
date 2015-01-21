@@ -26,13 +26,9 @@ module FedoraMigrate
       source.datastreams[RELS_EXT_DATASTREAM].content
     end
 
-    # Migrate any predicates from ActiveFedora::RDF::Fcrepo::System to ActiveFedora::RDF::RelsExt
+    # Override this if any predicate transformation is needed
     def migrate_predicate(fc3_uri)
-      if RDF::Vocabulary.find(fc3_uri) == ActiveFedora::RDF::Fcrepo::System
-        ActiveFedora::RDF::RelsExt.send(fc3_uri.to_s.split(/#/).last)
-      else
-        fc3_uri
-      end
+      fc3_uri
     end
 
     def migrate_object(fc3_uri)

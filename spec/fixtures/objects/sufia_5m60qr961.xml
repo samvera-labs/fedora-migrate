@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="sufia:5m60qr961"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="file1.txt"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2015-01-19T21:32:48.754Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2015-01-19T21:32:49.243Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2015-01-19T21:32:48.754Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2015-01-19T21:32:48.851Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2015-01-19T21:32:48.920Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2015-01-19T21:32:49.045Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>properties</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2015-01-19T21:32:49.170Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>content</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2015-01-19T21:32:49.243Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2015-01-19T21:32:48.754Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="377">
+<foxml:contentDigest TYPE="SHA-1" DIGEST="c8608120151f0e2b48a09ac06051ef594c54cfb8"/>
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>file1.txt</dc:title>
+  <dc:identifier>sufia:5m60qr961</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2015-01-19T21:32:48.851Z" MIMETYPE="application/rdf+xml" SIZE="428">
+<foxml:contentDigest TYPE="SHA-1" DIGEST="69571b36a593ae00289a969873948f738b10f501"/>
+<foxml:xmlContent>
+<rdf:RDF xmlns:ns0="info:fedora/fedora-system:def/relations-external#" xmlns:ns1="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/sufia:5m60qr961">
+    <ns1:hasModel rdf:resource="info:fedora/afmodel:GenericFile"></ns1:hasModel>
+    <ns0:isPartOf rdf:resource="info:fedora/sufia:5m60qr94g"></ns0:isPartOf>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="" CREATED="2015-01-19T21:32:48.920Z" MIMETYPE="text/xml" SIZE="548">
+<foxml:contentDigest TYPE="SHA-1" DIGEST="3644c2267e6f532982625c69ebd683fc8060c5a8"/>
+<foxml:binaryContent> 
+              PHJpZ2h0c01ldGFkYXRhIHhtbG5zPSJodHRwOi8vaHlkcmEtY29sbGFiLnN0YW5mb3JkLmVkdS9zY2hl
+              bWFzL3JpZ2h0c01ldGFkYXRhL3YxIiB2ZXJzaW9uPSIwLjEiPgogIDxjb3B5cmlnaHQ+CiAgICA8aHVt
+              YW4gdHlwZT0idGl0bGUiLz4KICAgIDxodW1hbiB0eXBlPSJkZXNjcmlwdGlvbiIvPgogICAgPG1hY2hp
+              bmUgdHlwZT0idXJpIi8+CiAgPC9jb3B5cmlnaHQ+CiAgPGFjY2VzcyB0eXBlPSJkaXNjb3ZlciI+CiAg
+              ICA8aHVtYW4vPgogICAgPG1hY2hpbmUvPgogIDwvYWNjZXNzPgogIDxhY2Nlc3MgdHlwZT0icmVhZCI+
+              CiAgICA8aHVtYW4vPgogICAgPG1hY2hpbmUvPgogIDwvYWNjZXNzPgogIDxhY2Nlc3MgdHlwZT0iZWRp
+              dCI+CiAgICA8aHVtYW4vPgogICAgPG1hY2hpbmU+CiAgICAgIDxwZXJzb24+YXdlYWRAcHN1LmVkdTwv
+              cGVyc29uPgogICAgPC9tYWNoaW5lPgogIDwvYWNjZXNzPgogIDxlbWJhcmdvPgogICAgPG1hY2hpbmUv
+              PgogIDwvZW1iYXJnbz4KICA8bGVhc2U+CiAgICA8bWFjaGluZS8+CiAgPC9sZWFzZT4KPC9yaWdodHNN
+              ZXRhZGF0YT4=
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="" CREATED="2015-01-19T21:32:49.045Z" MIMETYPE="application/n-triples" SIZE="409">
+<foxml:contentDigest TYPE="SHA-1" DIGEST="fee5a929c8f0fe1c24dbc8ed5111a98be27c1210"/>
+<foxml:binaryContent> 
+              PGluZm86ZmVkb3JhL3N1ZmlhOjVtNjBxcjk2MT4gPGh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy9kYXRl
+              U3VibWl0dGVkPiAiMjAxNS0wMS0xOSJeXjxodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSNk
+              YXRlPiAuCjxpbmZvOmZlZG9yYS9zdWZpYTo1bTYwcXI5NjE+IDxodHRwOi8vcHVybC5vcmcvZGMvdGVy
+              bXMvbW9kaWZpZWQ+ICIyMDE1LTAxLTE5Il5ePGh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1h
+              I2RhdGU+IC4KPGluZm86ZmVkb3JhL3N1ZmlhOjVtNjBxcjk2MT4gPGh0dHA6Ly9wdXJsLm9yZy9kYy90
+              ZXJtcy9jcmVhdG9yPiAiYXdlYWRAcHN1LmVkdSIgLgo8aW5mbzpmZWRvcmEvc3VmaWE6NW02MHFyOTYx
+              PiA8aHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zL3RpdGxlPiAiZmlsZTEudHh0IiAuCg==
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="properties" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="properties.0" LABEL="" CREATED="2015-01-19T21:32:49.170Z" MIMETYPE="text/xml" SIZE="76">
+<foxml:contentDigest TYPE="SHA-1" DIGEST="9ce3341f30d484d1e652672f47be3baa2fb45bb0"/>
+<foxml:binaryContent> 
+              PGZpZWxkcz4KICA8cmVsYXRpdmVfcGF0aC8+CiAgPGRlcG9zaXRvcj5hd2VhZEBwc3UuZWR1PC9kZXBv
+              c2l0b3I+CjwvZmllbGRzPg==
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="content" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="content.0" LABEL="file1.txt" CREATED="2015-01-19T21:32:49.243Z" MIMETYPE="text/plain" SIZE="7">
+<foxml:contentDigest TYPE="SHA-1" DIGEST="2b141ff6e12af000c045d5cb05a8ebd2d4e62e41"/>
+<foxml:binaryContent> 
+              ZmlsZSAxCg==
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>
