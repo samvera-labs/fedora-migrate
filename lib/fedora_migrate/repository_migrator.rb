@@ -15,34 +15,15 @@ module FedoraMigrate
 
     # TODO: need a reporting mechanism for results (issue #4)
     def migrate_objects
-      source_objects.each do |source|
-        Logger.info "Migrating source object #{source.pid}"
-        result = begin
-          FedoraMigrate::ObjectMover.new(source, nil, options).migrate
-        rescue NameError => e
-          "The most likely explanation is that your target is not defined"
-          error_message(e)
-        rescue StandardError => e
-          error_message(e)
-        end
-        unless result == true
-          Logger.warn "#{source.pid} failed.\n#{result}"
-          @failed = @failed + 1
-        end
-      end
+      source_objects.each { |source| migrate_object(source) }
+      @failed == 0
     end
 
     # TODO: need a reporting mechanism for results (issue #4)
     def migrate_relationships
-      return "Reltionship migration halted because #{failed.to_s} objects didn't migrate successfully." if failed > 0
-      source_objects.each do |source|
-        Logger.info "Migrating relationships for source object #{source.pid}"
-        begin
-          FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
-        rescue StandardError => e
-          Logger.warn "#{source.pid} relationship migration failed.\n#{error_message(e)}"
-        end
-      end
+      return "Relationship migration halted because #{failed.to_s} objects didn't migrate successfully." if failed > 0 && not_forced?
+      source_objects.each { |source| migrate_relationship(source) }
+      @failed == 0
     end
 
     # TODO: page through all the objects (issue #6)
@@ -51,6 +32,22 @@ module FedoraMigrate
     end
 
     private
+
+    def migrate_object source
+      Logger.info "Migrating source object #{source.pid}"
+      FedoraMigrate::ObjectMover.new(source, nil, options).migrate
+    rescue StandardError => e
+      Logger.warn "#{source.pid} failed.\n#{error_message(e)}"
+      @failed = @failed + 1
+    end
+
+    def migrate_relationship source
+      Logger.info "Migrating relationships for source object #{source.pid}"
+      FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+    rescue StandardError => e
+      Logger.warn "#{source.pid} relationship migration failed.\n#{error_message(e)}"
+      @failed = @failed + 1
+    end
 
     def error_message e
       [e.inspect, e.backtrace.join("\n\t")].join("\n\t")

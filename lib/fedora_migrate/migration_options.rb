@@ -7,5 +7,13 @@ module FedoraMigrate
       self.conversions = options.nil? ? [] : [options[:convert]].flatten      
     end
 
+    def forced?
+      options[:force] || false
+    end
+
+    def not_forced?
+      !forced?
+    end
+
   end
 end
