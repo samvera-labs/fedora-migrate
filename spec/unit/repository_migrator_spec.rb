@@ -14,6 +14,17 @@ describe FedoraMigrate::RepositoryMigrator do
     end
   end
 
+  context "when forcing" do
+    before do
+      allow_any_instance_of(FedoraMigrate::RepositoryMigrator).to receive(:source_objects).and_return([])
+      allow_any_instance_of(FedoraMigrate::RepositoryMigrator).to receive(:failed).and_return(1) 
+    end
+    subject { FedoraMigrate::RepositoryMigrator.new(namespace, { force: true }) }
+    specify "migrate relationships if failures are present" do
+      expect(subject.migrate_relationships).to be true
+    end
+  end
+
   context "without a given namespace" do
     describe "#namespace" do
       specify "is given in the repository profile" do
