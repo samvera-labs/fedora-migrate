@@ -14,3 +14,4 @@
 mkmf.log
 jetty
 .ruby-version
+.rvmrc
