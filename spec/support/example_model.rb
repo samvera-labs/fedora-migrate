@@ -61,6 +61,16 @@ module ExampleModel
 
     property :description, predicate: ::RDF::DC.description
 
+    property :date_uploaded, predicate: ::RDF::DC.dateSubmitted, multiple: false do |index|
+      index.type :date
+      index.as :stored_sortable
+    end
+
+    property :date_modified, predicate: ::RDF::DC.modified, multiple: false do |index|
+      index.type :date
+      index.as :stored_sortable
+    end
+
     contains "content", class_name: "ExampleModel::VersionedDatastream"
     contains "thumbnail", class_name: "ActiveFedora::File"
     contains "characterization", class_name: "ActiveFedora::File"

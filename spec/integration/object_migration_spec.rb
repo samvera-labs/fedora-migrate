@@ -90,6 +90,11 @@ describe "Migrating an object" do
         expect(subject.title).to eql(["world.png"])
       end
 
+      it "should migrate the createdDate and lastModifiedDate" do
+        # The value of lastModifiedDate will depend on when you loaded your test fixtures
+        expect(subject.date_modified).to eq source.lastModifiedDate
+        expect(subject.date_uploaded).to eq '2014-10-15T03:50:37.063Z'
+      end
     end
 
     context "with ISO-8859-1 characters" do
