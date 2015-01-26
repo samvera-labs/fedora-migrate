@@ -36,7 +36,7 @@ module FedoraMigrate
     def migrate_content_datastreams
       save
       target.attached_files.keys.each do |ds|
-        mover = FedoraMigrate::DatastreamMover.new(source.datastreams[ds.to_s], target.attached_files[ds.to_s])
+        mover = FedoraMigrate::DatastreamMover.new(source.datastreams[ds.to_s], target.attached_files[ds.to_s], options)
         mover.migrate
       end
     end

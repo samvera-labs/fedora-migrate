@@ -16,7 +16,7 @@ describe "Migrating the repository" do
     end
   end
 
-  context "with all target objects are defined" do
+  context "when all target objects are defined" do
 
     before do
       Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
@@ -38,8 +38,6 @@ describe "Migrating the repository" do
       Object.send(:remove_const, :Collection) if defined?(Collection)
       class Collection < ExampleModel::Collection
       end
-
-      FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
     end
 
     after do
@@ -50,19 +48,39 @@ describe "Migrating the repository" do
 
     let(:file1) { GenericFile.find("rb68xc089") }
     let(:file2) { GenericFile.find("xp68km39w") }
+    let(:versions_report) { GenericFile.all.map { |f| f.content.versions.count }.uniq }
 
-    it "should move every object" do
-      expect(file1.title).to eql ["world.png"]
-      expect(file2.title).to eql ["Sample Migration Object A"]
-      expect(file2.creator).to eql ["Adam Wead"]
-      expect(GenericFile.all.count).to eql 6
-      expect(Batch.all.count).to eql 2
-      expect(Batch.all.first.generic_files.count).to eql 2
-      expect(Batch.all.last.generic_files.count).to eql 2
-      expect(Collection.all.count).to eql 1
-      expect(Collection.first.members.count).to eql 2
+    context "by default" do
+      before do
+        FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
+      end
+      it "should move every object and its versions" do
+        expect(file1.title).to eql ["world.png"]
+        expect(file2.title).to eql ["Sample Migration Object A"]
+        expect(file2.creator).to eql ["Adam Wead"]
+        expect(GenericFile.all.count).to eql 6
+        expect(Batch.all.count).to eql 2
+        expect(Batch.all.first.generic_files.count).to eql 2
+        expect(Batch.all.last.generic_files.count).to eql 2
+        expect(Collection.all.count).to eql 1
+        expect(Collection.first.members.count).to eql 2
+        expect(versions_report).to match_array [0,3,9]
+      end
+    end
+
+    context "and the application will create versions" do
+      before do
+        FedoraMigrate.migrate_repository(namespace: "sufia", 
+          options: {convert: "descMetadata", application_creates_versions: true}
+        )
+      end
+      it "should move every object but not its versions" do
+        expect(file1.title).to eql ["world.png"]
+        expect(versions_report).to eql [0]
+      end
     end
 
   end
 
 end
+
