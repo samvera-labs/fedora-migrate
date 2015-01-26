@@ -8,6 +8,7 @@ module FedoraMigrate
       conversions.collect { |ds| convert_rdf_datastream(ds) }
       migrate_content_datastreams
       migrate_permissions
+      migrate_dates
       complete_target
     end
 
@@ -56,6 +57,10 @@ module FedoraMigrate
         mover = FedoraMigrate::PermissionsMover.new(source.datastreams[RIGHTS_DATASTREAM], target)
         mover.migrate
       end
+    end
+
+    def migrate_dates
+      FedoraMigrate::DatesMover.new(source, target).migrate
     end
 
     def create_target_model

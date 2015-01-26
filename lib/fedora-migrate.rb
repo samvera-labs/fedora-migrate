@@ -11,6 +11,7 @@ module FedoraMigrate
 
   autoload :DatastreamMover
   autoload :DatastreamVerification
+  autoload :DatesMover
   autoload :Errors
   autoload :FileConfigurator
   autoload :Hooks
