@@ -47,7 +47,7 @@ module FedoraMigrate
     def migrate_versions
       source.versions.each do |version|
         migrate_content(version)
-        target.create_version
+        target.create_version unless application_creates_versions?
         valid?(version)
       end
     end

@@ -18,22 +18,44 @@ describe FedoraMigrate::MigrationOptions do
     it { is_expected.to be_not_forced }
   end
 
-  describe "forced?" do
-    subject do
-      TestCase.new.tap do |example|
-        example.options = { convert: "datastream", force: true }
+  describe "#forced?" do
+    context "when set to true" do
+      subject do
+        TestCase.new.tap do |example|
+          example.options = { convert: "datastream", force: true }
+        end
       end
+      it { is_expected.to be_forced }
     end
-    it { is_expected.to be_forced }
+    context "when set to false" do
+      subject do
+        TestCase.new.tap do |example|
+          example.options = { force: false }
+        end
+      end
+      it { is_expected.to be_not_forced }
+    end
+    context "by default" do
+      subject { TestCase.new }
+      it { is_expected.to be_not_forced }
+    end
   end
 
-  describe "forced?" do
-    subject do
-      TestCase.new.tap do |example|
-        example.options = { convert: "datastream", force: false }
+  describe "#application_creates_versions" do
+    context "by default" do
+      subject do
+        TestCase.new.application_creates_versions?
       end
+      it { is_expected.to be false }
     end
-    it { is_expected.to be_not_forced }
+    context "when our own Hydra application creates versions" do
+      subject do
+        TestCase.new.tap do |example|
+          example.options = { application_creates_versions: true }
+        end
+      end
+      it { is_expected.to be_application_creates_versions }
+    end
   end
 
 end
