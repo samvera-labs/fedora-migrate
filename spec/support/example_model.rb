@@ -37,6 +37,10 @@ module ExampleModel
     property :creator, predicate: ::RDF::DC.creator do |index|
       index.as :stored_searchable, :facetable
     end
+    property :description, predicate: ::RDF::DC.description do |index|
+      index.type :text
+      index.as :stored_searchable
+    end
   end
 
   class VersionedDatastream < ActiveFedora::File
