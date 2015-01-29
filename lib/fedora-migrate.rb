@@ -9,6 +9,7 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),"tasks/*.rake"))].each { |
 module FedoraMigrate
   extend ActiveSupport::Autoload
 
+  autoload :ContentMover
   autoload :DatastreamMover
   autoload :DatastreamVerification
   autoload :DatesMover

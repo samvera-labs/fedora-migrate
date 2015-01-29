@@ -44,8 +44,9 @@ module FedoraMigrate
       valid?
     end
 
+    # Rubydora stores the versions array as the most recent first. We explicitly sort them according to createDate
     def migrate_versions
-      source.versions.each do |version|
+      source.versions.sort { |a,b| a.createDate <=> b.createDate }.each do |version|
         migrate_content(version)
         target.create_version unless application_creates_versions?
         valid?(version)
@@ -54,15 +55,7 @@ module FedoraMigrate
 
     def migrate_content datastream=nil
       datastream ||= source
-      if datastream.content.nil?
-        Logger.info "datastream '#{datastream.dsid}' is nil. It's probably defined in the target but not present in the source"
-        return true
-      end
-      target.content = datastream.content
-      target.original_name = datastream.label.try(:gsub, /"/, '\"')
-      target.mime_type = datastream.mimeType
-      Logger.info "#{target.inspect}"
-      save
+      FedoraMigrate::ContentMover.new(datastream, target).migrate
     end
 
   end
