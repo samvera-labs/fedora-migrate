@@ -1,3 +1,5 @@
+require 'rchardet'
+
 module FedoraMigrate
   class RDFDatastreamMover < Mover
 
@@ -30,7 +32,10 @@ module FedoraMigrate
       # Scholarsphere has some ISO-8859 encoded data, which violates the NTriples spec.
       # Here we correct that.
       def correct_encoding(input)
-        input.force_encoding(Encoding::ISO_8859_1).encode!(Encoding::UTF_8)
+        input.encode!(Encoding::UTF_8)
+      rescue Encoding::UndefinedConversionError
+        cd = ::CharDet.detect(input)
+        input.force_encoding(Encoding.find(cd["encoding"].upcase)).encode!(Encoding::UTF_8)
       end
 
       def reader
