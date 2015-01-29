@@ -58,6 +58,10 @@ module ExampleModel
     contains "characterization", class_name: "ActiveFedora::File"
   end
 
+  class OmDatastreamExample < ActiveFedora::Base
+    contains "characterization", class_name: "ActiveFedora::OmDatastream"
+  end
+
   class RDFObject < ActiveFedora::Base
     property :title, predicate: ::RDF::DC.title do |index|
       index.as :stored_searchable, :facetable
