@@ -32,18 +32,19 @@ describe "Migrating objects with relationships" do
       FedoraMigrate::ObjectMover.new(child_source).migrate
     end
 
-    describe "migrating the parent object's relationships" do
+    subject { Batch.find("rb68xc09k") }
 
+    describe "migrating the parent object's relationships" do
       before do
         FedoraMigrate::RelsExtDatastreamMover.new(child_source).migrate
       end
-
-      subject { Batch.find("rb68xc09k") }
-
-      specify "you can migrate the parent object's relationships" do
+      specify "should connect the child to the parent" do
         expect(subject.generic_files.count).to eql 1
       end
-
+      specify "is repeatable" do
+        FedoraMigrate::RelsExtDatastreamMover.new(child_source).migrate
+        expect(subject.generic_files.count).to eql 1
+      end
     end
 
   end
