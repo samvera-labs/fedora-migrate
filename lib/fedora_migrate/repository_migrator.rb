@@ -26,7 +26,6 @@ module FedoraMigrate
       @failed == 0
     end
 
-    # TODO: page through all the objects (issue #6)
     def get_source_objects
       FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
     end
