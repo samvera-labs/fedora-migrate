@@ -18,13 +18,14 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "rubydora", "~> 1.8" 
-  spec.add_dependency "hydra-head", "~> 9.0.0.beta1"
-  spec.add_dependency "equivalent-xml"
-
+  spec.add_dependency "hydra-head", "~> 9.0"
+  spec.add_dependency "rubydora", "~> 1.8"
+  spec.add_dependency "rchardet"
+  
   spec.add_development_dependency "bundler", "~> 1.7"
+  spec.add_development_dependency "equivalent-xml"
+  spec.add_development_dependency "hydra-collections", "~> 4.0"
+  spec.add_development_dependency "jettywrapper"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
-  spec.add_development_dependency "jettywrapper"
-  spec.add_development_dependency "hydra-collections", "~> 4.0.0.rc2"
 end

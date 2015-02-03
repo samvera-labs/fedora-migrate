@@ -27,6 +27,18 @@ describe "Migrating an object" do
       expect(subject.edit_users).to include("jilluser@example.com")
     end
 
+    describe "objects with Om datastreams" do
+      let(:mover) { FedoraMigrate::ObjectMover.new(source, ExampleModel::OmDatastreamExample.new) }
+      subject do
+        mover.migrate
+        mover.target
+      end
+      it "should migrate the object without warnings" do
+        expect(FedoraMigrate::Logger).to_not receive(:warn)
+        expect(subject.characterization.ng_xml).to be_equivalent_to(fits_xml)
+      end
+    end
+
   end
 
   context "when we have to determine the model" do

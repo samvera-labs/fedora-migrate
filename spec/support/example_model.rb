@@ -19,6 +19,7 @@ require HAC_DIR+'/app/models/hydra/access_controls/access_control_list'
 require HAC_DIR+'/app/models/hydra/access_controls/permission'
 require HAC_DIR+'/app/models/hydra/access_controls/embargo'
 require HAC_DIR+'/app/models/hydra/access_controls/lease'
+require HAC_DIR+'/app/models/concerns/hydra/with_depositor'
 require HAC_DIR+'/app/services/hydra/lease_service'
 require HAC_DIR+'/app/services/hydra/embargo_service'
 require HAC_DIR+'/app/validators/hydra/future_date_validator'
@@ -56,6 +57,10 @@ module ExampleModel
     contains "content", class_name: "ExampleModel::VersionedDatastream"
     contains "thumbnail", class_name: "ActiveFedora::File"
     contains "characterization", class_name: "ActiveFedora::File"
+  end
+
+  class OmDatastreamExample < ActiveFedora::Base
+    contains "characterization", class_name: "ActiveFedora::OmDatastream"
   end
 
   class RDFObject < ActiveFedora::Base
