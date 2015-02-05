@@ -29,7 +29,7 @@ module FedoraMigrate
     end
 
     def vet model
-      @target = model.split(/:/).last.constantize
+      @target = FedoraMigrate::Mover.id_component(model).constantize
       Logger.info "using #{model} for target"
     rescue NameError
       Logger.info "rejecting #{model} for target"

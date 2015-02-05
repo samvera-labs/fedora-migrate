@@ -39,6 +39,18 @@ module FedoraMigrate
         target.inspect
       end
     end
+
+    def id_component object=nil
+      object ||= source
+      raise FedoraMigrate::Errors::MigrationError, "can't get the id component without an object" if object.nil?
+      self.class.id_component(object)
+    end
+
+    def self.id_component object
+      return object.pid.split(/:/).last if object.kind_of?(Rubydora::DigitalObject)
+      return object.to_s.split(/:/).last if object.respond_to?(:to_s)
+      nil
+    end
     
   end
 end

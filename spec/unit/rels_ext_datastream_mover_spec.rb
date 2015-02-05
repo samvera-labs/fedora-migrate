@@ -1,30 +1,46 @@
 require 'spec_helper'
 
 describe FedoraMigrate::RelsExtDatastreamMover do
-  
-  let(:source) { FedoraMigrate.source.connection.find("sufia:rb68xc11m") }
-  let(:query) { subject.target }
 
-  describe "#migrate" do
-    context "with an existing target" do
-      before do
-        ActiveFedora::Base.create(id: 'rb68xc11m')
-        ActiveFedora::Base.create(id: 'rb68xc09k')
-        FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+  let(:file_id)  { "rb68xc11m" }
+  let(:batch_id) { "rb68xc09k" }
+  let(:source)   { FedoraMigrate.source.connection.find("sufia:#{file_id}") }
+  let(:query)    { subject.target }
+
+  context "with target objects present in Fedora 4" do
+    before do
+      ActiveFedora::Base.create(id: file_id)
+      ActiveFedora::Base.create(id: batch_id)
+    end
+
+    describe "#initialize" do
+      context "without a target" do
+        subject { FedoraMigrate::RelsExtDatastreamMover.new(source).target }
+        it { is_expected.to be_kind_of(ActiveFedora::Base) }
       end
-
-      subject { ActiveFedora::Base.find("rb68xc11m").ldp_source.graph.query([nil, ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf, nil]) }
-
-      it "migrates RDF relationships" do
-        expect(subject.first.subject).to eq RDF::URI.new('http://localhost:8983/fedora/rest/test/rb68xc11m')
-        expect(subject.first.object).to eq RDF::URI.new('http://localhost:8983/fedora/rest/test/rb68xc09k')
+      context "with a supplied target" do
+        subject { FedoraMigrate::RelsExtDatastreamMover.new(source, "a target").target }
+        it { is_expected.to eql "a target" }
       end
     end
-    
-    context "with a non-existent target" do
-      it "raises an error" do
-        expect { FedoraMigrate::RelsExtDatastreamMover.new(source) }.to raise_error(FedoraMigrate::Errors::MigrationError)
+
+    describe "#migrate" do
+      context "with an existing target" do
+        before  { FedoraMigrate::RelsExtDatastreamMover.new(source).migrate }
+        subject { ActiveFedora::Base.find(file_id).ldp_source.graph.query([nil, ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf, nil]) }
+        it "migrates RDF relationships" do
+          expect(subject.first.subject).to eq RDF::URI.new("http://localhost:8983/fedora/rest/test/#{file_id}")
+          expect(subject.first.object).to eq RDF::URI.new("http://localhost:8983/fedora/rest/test/#{batch_id}")
+        end
       end
     end
   end
+
+  context "with a non-existent target" do
+    let(:error_message) { "Target object was not found in Fedora 4. Did you migrate it?" }
+    it "raises an error" do
+      expect { FedoraMigrate::RelsExtDatastreamMover.new(source) }.to raise_error(FedoraMigrate::Errors::MigrationError, error_message)
+    end
+  end
+
 end
