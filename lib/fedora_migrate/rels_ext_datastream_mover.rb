@@ -10,9 +10,9 @@ module FedoraMigrate
     end
 
     def post_initialize
-      @target ||= ActiveFedora::Base.find(source.pid.split(/:/).last)
+      @target ||= ActiveFedora::Base.find(id_component)
     rescue ActiveFedora::ObjectNotFoundError
-      raise FedoraMigrate::Errors::MigrationError, "Target object was not found in Fedora4. Did you migrated it?"
+      raise FedoraMigrate::Errors::MigrationError, "Target object was not found in Fedora 4. Did you migrate it?"
     end
 
     private
@@ -41,19 +41,15 @@ module FedoraMigrate
       RDF::URI.new(ActiveFedora::Base.id_to_uri(id_component(fc3_uri)))
     end
 
-    def is_missing?(uri)
-      return false if ActiveFedora::Base.exists?(id_component(uri))
-      Logger.warn "#{source.pid} could not migrate relationship to #{uri.to_s} because it doesn't exist in Fedora4"
+    def has_missing_object?(statement)
+      return false if ActiveFedora::Base.exists?(id_component(statement.object))
+      Logger.warn "#{source.pid} could not migrate relationship #{statement.predicate} because #{statement.object} doesn't exist in Fedora 4"
       true
-    end
-
-    def id_component(uri)
-      uri.to_s.split(/:/).last
     end
 
     # All the graph statements except hasModel and those with missing objects
     def statements
-      graph.statements.reject { |stmt| stmt.predicate == ActiveFedora::RDF::Fcrepo::Model.hasModel || is_missing?(stmt.object) }
+      graph.statements.reject { |stmt| stmt.predicate == ActiveFedora::RDF::Fcrepo::Model.hasModel || has_missing_object?(stmt) }
     end
 
   end

@@ -64,9 +64,9 @@ module FedoraMigrate
     end
 
     def create_target_model
-      builder = FedoraMigrate::TargetConstructor.new(@source.models).build
-      raise FedoraMigrate::Errors::MigrationError, "No qualified targets found in #{@source.pid}" if builder.target.nil?
-      @target = builder.target.new(id: @source.pid.split(/:/).last)
+      builder = FedoraMigrate::TargetConstructor.new(source.models).build
+      raise FedoraMigrate::Errors::MigrationError, "No qualified targets found in #{source.pid}" if builder.target.nil?
+      @target = builder.target.new(id: id_component)
     end
 
   end

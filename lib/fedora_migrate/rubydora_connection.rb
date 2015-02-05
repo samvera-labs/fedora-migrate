@@ -1,5 +1,3 @@
-require 'rubydora'
-
 module FedoraMigrate
   class RubydoraConnection
     
