@@ -3,53 +3,59 @@ module FedoraMigrate
 
     include MigrationOptions
 
-    attr_accessor :source_objects, :namespace, :failed
+    attr_accessor :source_objects, :namespace, :report
+
+    Report = Struct.new(:status, :object, :relationships)
 
     def initialize namespace = nil, options = {}
       @namespace = namespace || repository_namespace
       @options = options
-      @failed = 0
       @source_objects = get_source_objects
+      @report = @options.fetch(:report, Hash.new)
       conversion_options
     end
 
-    # TODO: need a reporting mechanism for results (issue #4)
     def migrate_objects
       source_objects.each { |source| migrate_object(source) }
-      @failed == 0
     end
 
-    # TODO: need a reporting mechanism for results (issue #4)
     def migrate_relationships
-      return "Relationship migration halted because #{failed.to_s} objects didn't migrate successfully." if failed > 0 && not_forced?
+      return "Relationship migration halted because #{failures.to_s} objects didn't migrate successfully." if failures > 0 && not_forced?
       source_objects.each { |source| migrate_relationship(source) }
-      @failed == 0
     end
 
     def get_source_objects
       FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
     end
 
+    def failures
+      report.map { |k,v| 1 unless v.status == true }.compact.count
+    end
+
     private
 
     def migrate_object source
-      Logger.info "Migrating source object #{source.pid}"
-      FedoraMigrate::ObjectMover.new(source, nil, options).migrate
-    rescue StandardError => e
-      Logger.warn "#{source.pid} failed.\n#{error_message(e)}"
-      @failed = @failed + 1
+      object_report = Report.new
+      begin
+        object_report.object = FedoraMigrate::ObjectMover.new(source, nil, options).migrate
+        object_report.status = true
+      rescue StandardError => e
+        object_report.object = e.inspect
+        object_report.status = false
+      end
+      report[source.pid] = object_report
     end
 
     def migrate_relationship source
-      Logger.info "Migrating relationships for source object #{source.pid}"
-      FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
-    rescue StandardError => e
-      Logger.warn "#{source.pid} relationship migration failed.\n#{error_message(e)}"
-      @failed = @failed + 1
-    end
-
-    def error_message e
-      [e.inspect, e.backtrace.join("\n\t")].join("\n\t")
+      relationship_report = find_or_create_report(source)
+      begin
+        relationship_report.relationships = FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+        relationship_report.status = true
+      rescue StandardError => e
+        relationship_report.relationships = e.inspect
+        relationship_report.status = false
+      end
+      report[source.pid] = relationship_report
     end
 
     def repository_namespace
@@ -59,6 +65,10 @@ module FedoraMigrate
     def qualifying_object object
       name = object.pid.split(/:/).first
       return object if name.match(namespace)
+    end
+
+    def find_or_create_report source
+      report[source.pid] || Report.new
     end
 
   end

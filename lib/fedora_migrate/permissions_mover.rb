@@ -13,12 +13,12 @@ module FedoraMigrate
 
     def migrate
       FedoraMigrate::Permissions.instance_methods.each do |permission|
-        Logger.info "setting #{permission} to #{self.send(permission)}"
+        report << "#{permission} = #{self.send(permission)}"
         target.send(permission.to_s+"=", self.send(permission))
       end
       save
+      super
     end
-
 
     private
 

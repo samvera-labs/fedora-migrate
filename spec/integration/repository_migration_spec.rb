@@ -10,9 +10,11 @@ describe "Migrating the repository" do
       Object.send(:remove_const, :Collection) if defined?(Collection)
     end
 
-    it "should log warnings" do
-      expect(FedoraMigrate::Logger).to receive(:warn).at_least(6).times
-      FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
+    subject { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"}).report }
+
+    it "should report warnings" do
+      expect(subject.map { |k,v| v.status }.count).to eql 9
+      expect(subject.map { |k,v| v.status }.uniq).to eql [false]
     end
   end
 

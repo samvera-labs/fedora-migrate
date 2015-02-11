@@ -56,6 +56,12 @@ module FedoraMigrate
       migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
       migrator.migrate_objects
       migrator.migrate_relationships
+      migrator
+    end
+
+    def save_report report
+      json = JSON.load(report.to_json)
+      File.write("report.json", JSON.pretty_generate(json))
     end
 
   end

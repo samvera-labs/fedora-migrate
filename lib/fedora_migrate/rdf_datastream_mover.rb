@@ -4,11 +4,11 @@ module FedoraMigrate
   class RDFDatastreamMover < Mover
 
     def migrate
-      Logger.info "converting datastream '#{source.dsid}' to RDF"
       before_rdf_datastream_migration
       migrate_rdf_triples
       after_rdf_datastream_migration
       save
+      super
     end
 
     def migrate_rdf_triples

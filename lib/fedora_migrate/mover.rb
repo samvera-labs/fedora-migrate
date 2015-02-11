@@ -4,37 +4,34 @@ module FedoraMigrate
     include MigrationOptions
     include Hooks
 
-    attr_accessor :target, :source
+    attr_accessor :target, :source, :report
 
     def initialize *args
       @source = args[0]
       @target = args[1]
       @options = args[2]
+      @report = results_report
       post_initialize
     end
 
     def post_initialize
     end
 
+    def results_report
+      []
+    end
+
+    def migrate
+      report
+    end
+
     def save
-      if target.save
-        Logger.info "success for target UID #{target_description}"
-      else
-        raise FedoraMigrate::Errors::MigrationError, "Failed to save target: #{target_errors}"
-      end
+      raise FedoraMigrate::Errors::MigrationError, "Failed to save target: #{target_errors}" unless target.save
     end
 
     def target_errors
       if target.respond_to?(:errors)
         target.errors.full_messages.join(" -- ")
-      else
-        target.inspect
-      end
-    end
-
-    def target_description
-      if target.respond_to?(:id)
-        target.id
       else
         target.inspect
       end

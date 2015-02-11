@@ -7,6 +7,7 @@ module FedoraMigrate
       migrate_statements
       target.ldp_source.update
       update_index
+      super
     end
 
     def post_initialize
@@ -19,7 +20,9 @@ module FedoraMigrate
 
     def migrate_statements
       statements.each do |statement|
-        target.ldp_source.graph << [target.rdf_subject, migrate_predicate(statement.predicate), migrate_object(statement.object)]
+        triple = [target.rdf_subject, migrate_predicate(statement.predicate), migrate_object(statement.object)]
+        target.ldp_source.graph << triple
+        report << triple.join("--")
       end
     end
 
@@ -43,7 +46,7 @@ module FedoraMigrate
 
     def has_missing_object?(statement)
       return false if ActiveFedora::Base.exists?(id_component(statement.object))
-      Logger.warn "#{source.pid} could not migrate relationship #{statement.predicate} because #{statement.object} doesn't exist in Fedora 4"
+      report << "could not migrate relationship #{statement.predicate} because #{statement.object} doesn't exist in Fedora 4"
       true
     end
 

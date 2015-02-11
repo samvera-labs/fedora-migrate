@@ -30,9 +30,8 @@ module FedoraMigrate
 
     def vet model
       @target = FedoraMigrate::Mover.id_component(model).constantize
-      Logger.info "using #{model} for target"
     rescue NameError
-      Logger.info "rejecting #{model} for target"
+      Logger.debug "rejecting #{model} for target"
     end
 
   end

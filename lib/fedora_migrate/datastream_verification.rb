@@ -4,9 +4,7 @@ module FedoraMigrate::DatastreamVerification
 
   def valid? datastream=nil
     @datastream = datastream || @source
-    check = has_matching_checksums? || has_matching_nokogiri_checksums?
-    FedoraMigrate::Logger.warn "#{@datastream.pid} datastream #{@datastream.dsid} validation failed" unless check
-    check
+    has_matching_checksums? || has_matching_nokogiri_checksums?
   end
 
   def has_matching_checksums?
