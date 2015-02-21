@@ -4,8 +4,8 @@ Migrates content from a Fedora3 repository to a Fedora4 one.
 
 ## Status
 
-Very alpha. This has been tested against Penn State's existing Scholarsphere applications, as well
-as generic Sufia applications.
+This has been tested against Penn State's existing Scholarsphere applications, as well as generic Sufia applications.
+Other uses are presently unknown.
 
 ## Overview
 
@@ -49,15 +49,17 @@ Create a `config/fedora3.yml` file and point it to your current Fedora3 reposito
 Create a rake task to migrate your repository. You can use the following, taken from `lib/tasks/fedora-migrate.rake`,
 as an example:
 
-    desc "Migrate all my objects"
-    task migrate: :environment do
-      results = FedoraMigrate.migrate_repository(namespace: "mynamespace")
-      puts results
-    end
+``` ruby
+desc "Migrate all my objects"
+task migrate: :environment do
+  results = FedoraMigrate.migrate_repository(namespace: "mynamespace")
+  puts results
+end
+```
 
 Run the task
 
-    bundle exec rake migrate
+    $ bundle exec rake migrate
 
 By default, messages are logged to your Rails environment logs.
 
@@ -66,10 +68,12 @@ By default, messages are logged to your Rails environment logs.
 FedoraMigrate uses your existing Hydra/Fedora4 application as the basis for migrating objects. For example,
 given the model
 
-    class MyModel < ActiveFedora::Base
-      contains "content", class_name: "ActiveFedora::File"
-      contains "thumbnail", class_name: "ActiveFedora::File"
-    end
+``` ruby
+class MyModel < ActiveFedora::Base
+  contains "content", class_name: "ActiveFedora::File"
+  contains "thumbnail", class_name: "ActiveFedora::File"
+end
+```
 
 When the migrator finds an object in your Fedora3 repository that has the name _MyModel_ it attempts to instantiate the
 object `MyModel` in the context of your Hydra application. Only the datastreams, or files, that are defined in the model will
@@ -87,81 +91,110 @@ version will be migrated to Fedora4.
 If you elect to do so, FedoraMigrate will attempt to convert ActiveFedora::NtriplesRDFDatastream objects into RDF properties
 defined on your object. You can configure this as an option passed to the migrator.
 
-    FedoraMigrate.migrate_repository(namespace: "mynamespace", options: {convert: "descMetadata"})
+``` ruby
+FedoraMigrate.migrate_repository(namespace: "mynamespace", options: {convert: "descMetadata"})
+```
 
 However, you are required to define any and all RDF properties on your object in Hydra. For example, given
 
-    class RDFObject < ActiveFedora::Base
-      property :title, predicate: ::RDF::DC.title do |index|
-        index.as :stored_searchable, :facetable
-      end
-      contains "content", class_name: "ActiveFedora::File"
-      contains "thumbnail", class_name: "ActiveFedora::File"
-    end
+``` ruby
+class RDFObject < ActiveFedora::Base
+  property :title, predicate: ::RDF::DC.title do |index|
+    index.as :stored_searchable, :facetable
+  end
+  contains "content", class_name: "ActiveFedora::File"
+  contains "thumbnail", class_name: "ActiveFedora::File"
+end
+```
 
 If your descMetadata RDF datastream in Fedora3 contains the triple
 
     <info:fedora/mynamespace:xp68km39w> <http://purl.org/dc/terms/title> "My Title" .
 
-Then FedoraMigrate will define that property on your Fedora4 object using the DC term. *Note:* this feature currently works with
-DC terms only.
+Then FedoraMigrate will define that property on your Fedora4 object using the DC term.
 
 ### Object Migration
 
-By default, FedoraMigrate will use a model definition in your Hydra application to migrate a model found in Fedora3. You can
-opt to provide your own model, if you wish, by passing it as a second argument to the object mover class.
+By default, FedoraMigrate will use [FedoraMigrate::TargetConstructor](lib/fedora_migrate/target_constructor.rb)
+to find a model in your Hydra application that matches
+the Fedora3 source object. The constructor is designed to work with Hydra applications. If need be, you can override this
+class by creating a new one that determines a model name based on your own criteria.
 
-    source = FedoraMigrate.source.connection.find("mynamespace:rb68xc089")
-    mover = FedoraMigrate::ObjectMover.new source, CustomObject.new
-    mover.migrate
+``` ruby
+module FedoraMigrate
+  class TargetConstructor
+
+    attr_accessor :candidates, :target
+
+    def initialize candidates
+      @candidates = candidates
+    end
+
+    def build
+      # set target to whichever model you need based on candidates
+      return self
+    end
+  end
+end
+```
+
+You can also opt to provide your own model, if you wish, by passing it as a second argument to the object mover class.
+
+``` ruby
+source = FedoraMigrate.source.connection.find("mynamespace:rb68xc089")
+mover = FedoraMigrate::ObjectMover.new source, CustomObject.new
+mover.migrate
+```
 
 ### Configuration Hooks
 
-Because the migration process will be different for each user, there are before and after methods that
-are executed around the object migration process. These are helpful if your target object in Fedora4 requires
-additional preparation before it can be migrated. A good example is in Sufia, where a depositor must be applied
-before the object can be saved.
+Because the migration process will be different for each user, overridable methods are placed before and after each step in the
+migration process. These can be used if your source or target objects need additional preparation before they can be
+migrated. A good example is in Sufia, where a depositor must be applied before the object can be saved.
 
 To use the hooks, simply define them in your migration task
 
-    module FedoraMigrate::Hooks
+``` ruby
+module FedoraMigrate::Hooks
 
-      # Both @source and @target are available, as the Rubydora object and ActiveFedora model, respectively
-    
-      # Apply depositor metadata before you migrate an object
-      def before_object_migration
-        xml = Nokogiri::XML(source.datastreams["properties"].content)
-        target.apply_depositor_metadata xml.xpath("//depositor").text
-      end
-    
-      def after_object_migration
-        # additional actions as needed
-      end
-    
-    end
+  # Both @source and @target are available, as the Rubydora object and ActiveFedora model, respectively
 
-    desc "Migrate all my objects"
-    task migrate: :environment do
-      results = FedoraMigrate.migrate_repository(namespace: "mynamespace", options: {convert: "descMetadata"})
-      puts results
-    end
+  # Apply depositor metadata before you migrate an object
+  def before_object_migration
+    xml = Nokogiri::XML(source.datastreams["properties"].content)
+    target.apply_depositor_metadata xml.xpath("//depositor").text
+  end
+
+  def after_object_migration
+    # additional actions as needed
+  end
+
+end
+
+desc "Migrate all my objects"
+task migrate: :environment do
+  results = FedoraMigrate.migrate_repository(namespace: "mynamespace", options: {convert: "descMetadata"})
+  puts results
+end
+```
 
 ## Testing
 
-Execute `bundle exec rake` to run the test suite. Afterwards,
+Execute `bundle exec rake` to run the test suite.
 
-    bundle exec rake jetty:clean jetty:start
-    bundle exec rake fixtures:load
-    bundle exec rspec
+    $ bundle exec rake jetty:clean jetty:start
+    $ bundle exec rake fixtures:load
+    $ bundle exec rspec
 
-Will run all the spec tests and leave jetty running if you wish to run specific tests.
+This will run all the spec tests and leave jetty running if you wish to run specific tests.
 
 If you have sample objects that you feel should be used as relevant testing examples, please add them to
 `spec/fixtures/objects` and re-run the tests. Sample objects should be exported from existing Fedora3
 repositories as foxml files using the "archive" option. This can be done via the admin web interface,
-[http://localhost:8983/fedora3/admin](http://localhost:8983/fedora3/admin), or using the fedora-export.sh 
-command under `FEDORA_HOME/client/bin`. Note that the script option is available to full installs of Fedora3 but
-may not work under hydra-jetty.
+[http://localhost:8983/fedora3/admin](http://localhost:8983/fedora3/admin), or using 
+`FEDORA_HOME/client/bin/fedora-export.sh`.
+
+*Note that the script option may only work under full installs of Fedora3 and not hydra-jetty.*
 
 ## TODOs and Reporting Errors
 
@@ -185,3 +218,9 @@ CLA, please send a note to hydra-tech@googlegroups.com.
 
 Anyone is welcome to use this software and report issues.
 In order to merge any work contributed, you'll need to sign a contributor license agreement.
+For more information on signing a CLA, please contact `legal@projecthyra.org`
+# Project Hydra
+This software has been developed by and is brought to you by the Hydra community.  Learn more at the
+[Project Hydra website](http://projecthydra.org)
+
+![Project Hydra Logo](https://github.com/uvalib/libra-oa/blob/a6564a9e5c13b7873dc883367f5e307bf715d6cf/public/images/powered_by_hydra.png?raw=true)
