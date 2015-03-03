@@ -3,13 +3,16 @@ module FedoraMigrate
 
     RIGHTS_DATASTREAM = "rightsMetadata".freeze
 
+    ContentDatastreamReport = Struct.new(:ds, :versions)
+    RDFDatastreamReport = Struct.new(:ds, :status)
+    Report = Struct.new(:id, :class, :content_datastreams, :rdf_datastreams, :permissions, :dates)
+
     def migrate
       prepare_target
       conversions.collect { |ds| convert_rdf_datastream(ds) }
-      migrate_content_datastreams
-      migrate_permissions
-      migrate_dates
+      migrate_datastreams
       complete_target
+      super
     end
 
     def post_initialize
@@ -17,18 +20,31 @@ module FedoraMigrate
       create_target_model if target.nil?
     end
 
+    def results_report
+      Report.new.tap do |report|
+        report.content_datastreams = []
+        report.rdf_datastreams = []
+      end
+    end
+
     def prepare_target
-      Logger.info "running before_object_migration hooks"
+      report.class = target.class.to_s
+      report.id = target.id
       before_object_migration
     end
 
     def complete_target
-      Logger.info "running after_object_migration hooks"
       after_object_migration
       save
     end
 
     private
+
+    def migrate_datastreams
+      migrate_content_datastreams
+      migrate_permissions
+      migrate_dates
+    end
 
     # We have to call save before migrating content datastreams, otherwise versions aren't recorded
     # TODO: this will fail if required fields are defined in a descMetadata datastream that is not
@@ -37,14 +53,14 @@ module FedoraMigrate
       save
       target.attached_files.keys.each do |ds|
         mover = FedoraMigrate::DatastreamMover.new(source.datastreams[ds.to_s], target.attached_files[ds.to_s], options)
-        mover.migrate
+        report.content_datastreams << ContentDatastreamReport.new(ds, mover.migrate)
       end
     end
 
     def convert_rdf_datastream ds
       if source.datastreams.key?(ds)
         mover = FedoraMigrate::RDFDatastreamMover.new(datastream_content(ds), target)
-        mover.migrate
+        report.rdf_datastreams << RDFDatastreamReport.new(ds, mover.migrate)
       end
     end
 
@@ -55,12 +71,12 @@ module FedoraMigrate
     def migrate_permissions
       if source.datastreams.keys.include?(RIGHTS_DATASTREAM) && target.respond_to?(:permissions)
         mover = FedoraMigrate::PermissionsMover.new(source.datastreams[RIGHTS_DATASTREAM], target)
-        mover.migrate
+        report.permissions = mover.migrate
       end
     end
 
     def migrate_dates
-      FedoraMigrate::DatesMover.new(source, target).migrate
+      report.dates = FedoraMigrate::DatesMover.new(source, target).migrate
     end
 
     def create_target_model

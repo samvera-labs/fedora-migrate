@@ -12,19 +12,28 @@ describe "Collections with missing files" do
   end
 
   context "when migrating relationships" do
-
     let(:migrated_collection) { ExampleModel::Collection.first }
     let(:error_message) do
       "scholarsphere:#{collection} could not migrate relationship info:fedora/fedora-system:def/relations-external#hasCollectionMember because info:fedora/scholarsphere:#{missing_file} doesn't exist in Fedora 4"
-    end 
-
-    it "should only migrate existing relationships and log failed ones" do
-      expect(FedoraMigrate::Logger).to receive(:warn).with(error_message)
-      FedoraMigrate::RelsExtDatastreamMover.new(FedoraMigrate.find("scholarsphere:#{collection}")).migrate
+    end
+    before { FedoraMigrate::RelsExtDatastreamMover.new(FedoraMigrate.find("scholarsphere:#{collection}")).migrate }
+    it "should only migrate existing relationships" do
       expect(migrated_collection.members.count).to eql 2
       expect(migrated_collection.member_ids).to_not include(missing_file)
     end
+  end
 
+  context "when reporting" do
+    subject { FedoraMigrate::RelsExtDatastreamMover.new(FedoraMigrate.find("scholarsphere:#{collection}")).migrate }
+    it "should include failed relationships" do
+      expect(subject.sort.first).to match(/^could not migrate relationship/)
+    end
+    it "should include all the possible relationships" do
+      expect(subject.count).to eql 3
+    end
+    it "should include the successful relationships" do
+      expect(subject.sort.last).to match(/^http/)
+    end
   end
 
 end

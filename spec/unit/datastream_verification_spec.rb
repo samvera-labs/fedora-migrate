@@ -23,10 +23,7 @@ describe FedoraMigrate::DatastreamVerification do
     context "that do not match Fedora4's checksum" do
       subject { TestSubject.new(bad_binary_source) }
       before  { allow(subject).to receive(:target_checksum).twice.and_return("bar") }
-      specify "are not valid and logged" do
-        expect(FedoraMigrate::Logger).to receive(:warn)
-        expect(subject).to_not be_valid
-      end
+      it      { is_expected.to_not be_valid }
     end
     context "when the checksum is missing" do
       subject { TestSubject.new(missing_checksum) }
@@ -37,10 +34,7 @@ describe FedoraMigrate::DatastreamVerification do
       end
       context "and a newly calculated checksum does not match" do
         before { expect_any_instance_of(TestSubject).to receive(:target_checksum).twice.and_return(Digest::SHA1.hexdigest("bar")) }
-        specify "are not valid and logged" do
-          expect(FedoraMigrate::Logger).to receive(:warn)
-          expect(subject).to_not be_valid
-        end
+        it     { is_expected.to_not be_valid }
       end
     end
   end

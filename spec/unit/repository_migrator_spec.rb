@@ -5,23 +5,44 @@ describe FedoraMigrate::RepositoryMigrator do
   let(:namespace) { "sufia" }
 
   it { is_expected.to respond_to(:source_objects) }
-  it { is_expected.to respond_to(:failed) }
+  it { is_expected.to respond_to(:report) }
   it { is_expected.to respond_to(:namespace) }
 
-  describe "#failed" do
-    specify "sets to zero" do
-      expect(subject.failed).to eql(0)
+  describe "#failures" do
+    context "when objects have failed to migrate" do
+      let(:failing_report) { { pid1: FedoraMigrate::RepositoryMigrator::Report.new(false, "objects", "relationships") } }
+      subject do
+        migrator = FedoraMigrate::RepositoryMigrator.new(namespace, { report: failing_report })
+        migrator.failures
+      end
+      it { is_expected.to be 1}
+    end
+    context "when all objects have migrated" do
+      let(:passing_report) { { pid1: FedoraMigrate::RepositoryMigrator::Report.new(true, "objects", "relationships") } }
+      subject do
+        migrator = FedoraMigrate::RepositoryMigrator.new(namespace, { report: passing_report })
+        migrator.failures
+      end
+      it { is_expected.to eql 0}
     end
   end
 
-  context "when forcing" do
+  describe "forcing relationship migration" do
     before do
-      allow_any_instance_of(FedoraMigrate::RepositoryMigrator).to receive(:source_objects).and_return([])
-      allow_any_instance_of(FedoraMigrate::RepositoryMigrator).to receive(:failed).and_return(1) 
+      allow(subject).to receive(:source_objects).and_return([])
+      allow(subject).to receive(:failures).and_return(1)
     end
-    subject { FedoraMigrate::RepositoryMigrator.new(namespace, { force: true }) }
-    specify "migrate relationships if failures are present" do
-      expect(subject.migrate_relationships).to be true
+    context "without an explicit force" do
+      subject { FedoraMigrate::RepositoryMigrator.new(namespace) }
+      it "should not migrate relationships" do
+        expect(subject.migrate_relationships).to eql("Relationship migration halted because 1 objects didn't migrate successfully.")
+      end
+    end
+    context "with an explicit force" do
+      subject { FedoraMigrate::RepositoryMigrator.new(namespace, { force: true }) }
+      it "should migrate relationships" do
+        expect(subject.migrate_relationships).to_not be_nil
+      end
     end
   end
 

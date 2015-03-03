@@ -14,7 +14,7 @@ describe FedoraMigrate::ObjectMover do
 
   describe "#prepare_target" do
     subject do
-      FedoraMigrate::ObjectMover.new("source", "target").prepare_target
+      FedoraMigrate::ObjectMover.new("source", double("Target", id: nil)).prepare_target
     end
     it "should call the before hook and save the target" do
       expect_any_instance_of(FedoraMigrate::ObjectMover).to receive(:before_object_migration)
@@ -24,7 +24,7 @@ describe FedoraMigrate::ObjectMover do
 
   describe "#complete_target" do
     subject do
-      FedoraMigrate::ObjectMover.new("source", "target").complete_target
+      FedoraMigrate::ObjectMover.new("source", double("Target", id: nil)).complete_target
     end
     it "should call the after hook and save the target" do
       expect_any_instance_of(FedoraMigrate::ObjectMover).to receive(:after_object_migration)
