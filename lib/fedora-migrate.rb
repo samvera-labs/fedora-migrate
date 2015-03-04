@@ -19,6 +19,7 @@ module FedoraMigrate
   autoload :Hooks
   autoload :Logger
   autoload :MigrationOptions
+  autoload :MigrationReport
   autoload :Mover
   autoload :ObjectMover
   autoload :Permissions
@@ -33,15 +34,11 @@ module FedoraMigrate
   autoload :TripleConverter
 
   class << self
-    attr_reader :fedora_config, :config_options, :source
+    attr_reader :fedora_config, :source
     attr_accessor :configurator
 
     def fedora_config
       @fedora_config ||= ActiveFedora::Config.new(configurator.fedora3_config)
-    end
-
-    def config_options
-      @config_options ||= "comming soon!"
     end
 
     def source
@@ -57,11 +54,6 @@ module FedoraMigrate
       migrator.migrate_objects
       migrator.migrate_relationships
       migrator
-    end
-
-    def save_report report
-      json = JSON.load(report.to_json)
-      File.write("report.json", JSON.pretty_generate(json))
     end
 
   end
