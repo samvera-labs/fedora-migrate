@@ -8,8 +8,8 @@ namespace :fedora do
   namespace :migrate do
     desc "Migrates all objects in a Sufia-based application"
     task sufia: :environment do
-      results = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
-      puts results
+      migrator = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
+      migrator.report.save
     end
 
     desc "Migrates only relationships in a Sufia-based application"
@@ -38,6 +38,12 @@ namespace :fedora do
     task :relationship, [:pid] => :environment do |t, args|
       raise "Please provide a pid, example changeme:1234" if args[:pid].nil?
       FedoraMigrate::RelsExtDatastreamMover.new(FedoraMigrate.source.connection.find(args[:pid])).migrate
+    end
+
+    desc "Report the results of a migration"
+    task :report, [:file] => :environment do |t, args|
+      raise "Please provide a path to a report.json file" if args[:file].nil?
+      FedoraMigrate::MigrationReport.new(args[:file]).report_failures
     end
   
   end

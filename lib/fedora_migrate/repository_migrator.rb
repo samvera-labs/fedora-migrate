@@ -5,13 +5,13 @@ module FedoraMigrate
 
     attr_accessor :source_objects, :namespace, :report
 
-    Report = Struct.new(:status, :object, :relationships)
+    SingleObjectReport = Struct.new(:status, :object, :relationships)
 
     def initialize namespace = nil, options = {}
       @namespace = namespace || repository_namespace
       @options = options
+      @report = MigrationReport.new(@options.fetch(:report, nil))
       @source_objects = get_source_objects
-      @report = @options.fetch(:report, Hash.new)
       conversion_options
     end
 
@@ -25,17 +25,21 @@ module FedoraMigrate
     end
 
     def get_source_objects
-      FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
+      if report.empty?
+        FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
+      else
+        report.failed_objects.map { |o| FedoraMigrate.source.connection.find(o) }
+      end
     end
 
     def failures
-      report.map { |k,v| 1 unless v.status == true }.compact.count
+      report.failed_objects.count
     end
 
     private
 
     def migrate_object source
-      object_report = Report.new
+      object_report = SingleObjectReport.new
       begin
         object_report.object = FedoraMigrate::ObjectMover.new(source, nil, options).migrate
         object_report.status = true
@@ -43,11 +47,11 @@ module FedoraMigrate
         object_report.object = e.inspect
         object_report.status = false
       end
-      report[source.pid] = object_report
+      report.results[source.pid] = object_report
     end
 
     def migrate_relationship source
-      relationship_report = find_or_create_report(source)
+      relationship_report = find_or_create_single_object_report(source)
       begin
         relationship_report.relationships = FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
         relationship_report.status = true
@@ -55,7 +59,7 @@ module FedoraMigrate
         relationship_report.relationships = e.inspect
         relationship_report.status = false
       end
-      report[source.pid] = relationship_report
+      report.results[source.pid] = relationship_report
     end
 
     def repository_namespace
@@ -67,9 +71,8 @@ module FedoraMigrate
       return object if name.match(namespace)
     end
 
-    def find_or_create_report source
-      report[source.pid] || Report.new
+    def find_or_create_single_object_report source
+      report.results[source.pid] || SingleObjectReport.new
     end
-
   end
 end

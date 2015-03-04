@@ -1,0 +1,339 @@
+{
+  "sufia:5m60qr94g": {
+    "status": false,
+    "object": "Sample object migration failure",
+    "relationships": [
+
+    ]
+  },
+  "sufia:5m60qr95r": {
+    "status": true,
+    "object": {
+      "id": "5m60qr95r",
+      "class": "GenericFile",
+      "content_datastreams": [
+        {
+          "ds": "content",
+          "versions": [
+            {
+              "name": "file2.txt",
+              "mime_type": "text/plain",
+              "original_date": "2015-01-19T21:32:47Z"
+            }
+          ]
+        },
+        {
+          "ds": "thumbnail",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        },
+        {
+          "ds": "characterization",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        }
+      ],
+      "rdf_datastreams": [
+        {
+          "ds": "descMetadata",
+          "status": [
+
+          ]
+        }
+      ],
+      "permissions": [
+        "read_groups = []",
+        "edit_groups = []",
+        "discover_groups = []",
+        "read_users = []",
+        "edit_users = [\"awead@psu.edu\"]",
+        "discover_users = []"
+      ],
+      "dates": {
+        "uploaded": null,
+        "modified": null
+      }
+    },
+    "relationships": [
+      "http://localhost:8983/fedora/rest/test/5m60qr95r--info:fedora/fedora-system:def/relations-external#isPartOf--http://localhost:8983/fedora/rest/test/5m60qr94g"
+    ]
+  },
+  "sufia:5m60qr961": {
+    "status": true,
+    "object": {
+      "id": "5m60qr961",
+      "class": "GenericFile",
+      "content_datastreams": [
+        {
+          "ds": "content",
+          "versions": [
+            {
+              "name": "file1.txt",
+              "mime_type": "text/plain",
+              "original_date": "2015-01-19T21:32:49Z"
+            }
+          ]
+        },
+        {
+          "ds": "thumbnail",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        },
+        {
+          "ds": "characterization",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        }
+      ],
+      "rdf_datastreams": [
+        {
+          "ds": "descMetadata",
+          "status": [
+
+          ]
+        }
+      ],
+      "permissions": [
+        "read_groups = []",
+        "edit_groups = []",
+        "discover_groups = []",
+        "read_users = []",
+        "edit_users = [\"awead@psu.edu\"]",
+        "discover_users = []"
+      ],
+      "dates": {
+        "uploaded": null,
+        "modified": null
+      }
+    },
+    "relationships": [
+      "http://localhost:8983/fedora/rest/test/5m60qr961--info:fedora/fedora-system:def/relations-external#isPartOf--http://localhost:8983/fedora/rest/test/5m60qr94g"
+    ]
+  },
+  "sufia:5m60qr979": {
+    "status": true,
+    "object": {
+      "id": "5m60qr979",
+      "class": "Collection",
+      "content_datastreams": [
+
+      ],
+      "rdf_datastreams": [
+        {
+          "ds": "descMetadata",
+          "status": [
+
+          ]
+        }
+      ],
+      "permissions": [
+        "read_groups = [\"public\"]",
+        "edit_groups = []",
+        "discover_groups = []",
+        "read_users = []",
+        "edit_users = [\"awead@psu.edu\"]",
+        "discover_users = []"
+      ],
+      "dates": {
+        "uploaded": "2015-01-19T21:34:23.805Z",
+        "modified": "2015-03-03T18:48:51.16Z"
+      }
+    },
+    "relationships": [
+      "http://localhost:8983/fedora/rest/test/5m60qr979--info:fedora/fedora-system:def/relations-external#hasCollectionMember--http://localhost:8983/fedora/rest/test/5m60qr95r",
+      "http://localhost:8983/fedora/rest/test/5m60qr979--info:fedora/fedora-system:def/relations-external#hasCollectionMember--http://localhost:8983/fedora/rest/test/5m60qr961"
+    ]
+  },
+  "sufia:rb68xc089": {
+    "status": false,
+    "object": "Sample object migration failure",
+    "relationships": [
+
+    ]
+  },
+  "sufia:rb68xc09k": {
+    "status": true,
+    "object": {
+      "id": "rb68xc09k",
+      "class": "Batch",
+      "content_datastreams": [
+
+      ],
+      "rdf_datastreams": [
+
+      ],
+      "permissions": null,
+      "dates": {
+        "uploaded": null,
+        "modified": null
+      }
+    },
+    "relationships": [
+
+    ]
+  },
+  "sufia:rb68xc10b": {
+    "status": true,
+    "object": {
+      "id": "rb68xc10b",
+      "class": "GenericFile",
+      "content_datastreams": [
+        {
+          "ds": "content",
+          "versions": [
+
+          ]
+        },
+        {
+          "ds": "thumbnail",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        },
+        {
+          "ds": "characterization",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        }
+      ],
+      "rdf_datastreams": [
+
+      ],
+      "permissions": [
+        "read_groups = []",
+        "edit_groups = []",
+        "discover_groups = []",
+        "read_users = []",
+        "edit_users = [\"jilluser@example.com\"]",
+        "discover_users = []"
+      ],
+      "dates": {
+        "uploaded": null,
+        "modified": null
+      }
+    },
+    "relationships": [
+      "http://localhost:8983/fedora/rest/test/rb68xc10b--info:fedora/fedora-system:def/relations-external#isPartOf--http://localhost:8983/fedora/rest/test/rb68xc09k"
+    ]
+  },
+  "sufia:rb68xc11m": {
+    "status": true,
+    "object": {
+      "id": "rb68xc11m",
+      "class": "GenericFile",
+      "content_datastreams": [
+        {
+          "ds": "content",
+          "versions": [
+
+          ]
+        },
+        {
+          "ds": "thumbnail",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        },
+        {
+          "ds": "characterization",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        }
+      ],
+      "rdf_datastreams": [
+
+      ],
+      "permissions": [
+        "read_groups = []",
+        "edit_groups = []",
+        "discover_groups = []",
+        "read_users = []",
+        "edit_users = [\"otherUser\"]",
+        "discover_users = []"
+      ],
+      "dates": {
+        "uploaded": null,
+        "modified": null
+      }
+    },
+    "relationships": [
+      "http://localhost:8983/fedora/rest/test/rb68xc11m--info:fedora/fedora-system:def/relations-external#isPartOf--http://localhost:8983/fedora/rest/test/rb68xc09k"
+    ]
+  },
+  "sufia:xp68km39w": {
+    "status": true,
+    "object": {
+      "id": "xp68km39w",
+      "class": "GenericFile",
+      "content_datastreams": [
+        {
+          "ds": "content",
+          "versions": [
+
+          ]
+        },
+        {
+          "ds": "thumbnail",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        },
+        {
+          "ds": "characterization",
+          "versions": [
+            {
+              "error": "Nil source -- it's probably defined in the target but not present in the source"
+            }
+          ]
+        }
+      ],
+      "rdf_datastreams": [
+        {
+          "ds": "descMetadata",
+          "status": [
+
+          ]
+        }
+      ],
+      "permissions": [
+        "read_groups = []",
+        "edit_groups = []",
+        "discover_groups = []",
+        "read_users = []",
+        "edit_users = [\"awead@psu.edu\"]",
+        "discover_users = []"
+      ],
+      "dates": {
+        "uploaded": null,
+        "modified": null
+      }
+    },
+    "relationships": [
+
+    ]
+  }
+}

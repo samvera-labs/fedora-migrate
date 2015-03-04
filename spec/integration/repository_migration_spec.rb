@@ -13,8 +13,7 @@ describe "Migrating the repository" do
     subject { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"}).report }
 
     it "should report warnings" do
-      expect(subject.map { |k,v| v.status }.count).to eql 9
-      expect(subject.map { |k,v| v.status }.uniq).to eql [false]
+      expect(subject.failed_objects.count).to eql 9
     end
   end
 
@@ -53,9 +52,7 @@ describe "Migrating the repository" do
     let(:versions_report) { GenericFile.all.map { |f| f.content.versions.count }.uniq }
 
     context "by default" do
-      before do
-        FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"})
-      end
+      before { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"}) }
       it "should move every object and its versions" do
         expect(file1.title).to eql ["world.png"]
         expect(file2.title).to eql ["Sample Migration Object A"]
@@ -82,7 +79,27 @@ describe "Migrating the repository" do
       end
     end
 
+    context "with an existing report" do
+      let(:report) { "spec/fixtures/failed-report.json" }
+      let(:new_report) { FedoraMigrate::MigrationReport.new("report.json") }
+      before do
+        FileUtils.rm("report.json") if File.exists?("report.json")
+        migrator = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata", report: report})
+        migrator.report.save
+      end
+      after { FileUtils.rm("report.json") }
+      it "only migrates the objects that have failed" do
+        expect(GenericFile.all.count).to eql 1
+        expect(Batch.all.count).to eql 1
+        expect(Collection.all.count).to eql 0
+        expect(new_report.total_objects).to eql 9
+        expect(new_report.failures).to eql 0
+      end
+    end
+
   end
+
+
 
 end
 
