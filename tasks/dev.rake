@@ -2,7 +2,7 @@ require 'fedora-migrate'
 require 'rspec/core'
 require 'rspec/core/rake_task'
 require 'jettywrapper'
-Jettywrapper.url = "https://github.com/projecthydra/hydra-jetty/archive/fedora-4/migrate.zip"
+Jettywrapper.url = "https://github.com/projecthydra/hydra-jetty/archive/migrate.zip"
 
 RSpec::Core::RakeTask.new(:spec)
 
