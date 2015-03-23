@@ -7,8 +7,14 @@ Jettywrapper.url = "https://github.com/projecthydra/hydra-jetty/archive/migrate.
 RSpec::Core::RakeTask.new(:spec)
 
 desc "Run continuous integration tests"
-task ci: ['jetty:clean', 'jetty:start', 'fixtures:load', 'spec']
-
+task ci: ['jetty:clean'] do
+  jetty_params = Jettywrapper.load_config
+  error = Jettywrapper.wrap(jetty_params) do
+    Rake::Task['fixtures:load'].invoke
+    Rake::Task['spec'].invoke
+  end
+  raise "test failures: #{error}" if error
+end
 namespace :fixtures do
 
   desc "Load Fedora3 fixtures for testing; use FIXTURE_PATH= for your own"

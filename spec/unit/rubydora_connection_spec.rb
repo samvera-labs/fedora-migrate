@@ -5,6 +5,10 @@ describe FedoraMigrate::RubydoraConnection do
 
     let (:fedora_url) { "http://my.fedora3.instance" }
 
+    before do
+      allow_any_instance_of(Rubydora::Repository).to receive(:check_repository_version!).and_return("3.8")
+    end
+
     subject {
       FedoraMigrate::RubydoraConnection.new timeout: 3600, validateChecksum: true, url: fedora_url
     }
