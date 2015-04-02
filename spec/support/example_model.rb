@@ -27,6 +27,8 @@ require HAC_DIR+'/app/validators/hydra/future_date_validator'
 # Loading hydra-collections
 require 'hydra-collections'
 require HCR_DIR+'/app/models/concerns/hydra/model_methods'
+require HCL_DIR+'/app/models/concerns/hydra/collections/metadata'
+require HCL_DIR+'/app/models/concerns/hydra/collections/relations'
 require HCL_DIR+'/app/models/concerns/hydra/collection'
 
 module ExampleModel
