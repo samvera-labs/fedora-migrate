@@ -33,6 +33,7 @@ RSpec.configure do |config|
   config.before(:each) do
     ActiveFedora::Cleaner.clean!
     ActiveFedora::SolrService.instance.conn.delete_by_query('*:*', params: {'softCommit' => true})
+    FileUtils.rm_rf(FedoraMigrate::MigrationReport::DEFAULT_PATH)
   end
 
   config.order = :random

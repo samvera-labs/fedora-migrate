@@ -80,26 +80,28 @@ describe "Migrating the repository" do
     end
 
     context "with an existing report" do
-      let(:report) { "spec/fixtures/failed-report.json" }
-      let(:new_report) { FedoraMigrate::MigrationReport.new("report.json") }
+      let(:sample_report)   { "spec/fixtures/reports/failed" }
+      let(:failed_report)   { "failed" }
+      let(:new_report)      { FedoraMigrate::MigrationReport.new(failed_report) }
+      let(:original_report) { FedoraMigrate::MigrationReport.new(sample_report) }
+      let(:sample_pid)      { "sufia:rb68xc089" }
       before do
-        FileUtils.rm("report.json") if File.exists?("report.json")
-        migrator = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata", report: report})
-        migrator.report.save
+        FileUtils.rm_rf(failed_report)
+        FileUtils.cp_r(sample_report, failed_report)
+        migrator = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata", report: failed_report})
       end
-      after { FileUtils.rm("report.json") }
+      after { FileUtils.rm_rf(failed_report) }
       it "only migrates the objects that have failed" do
         expect(GenericFile.all.count).to eql 1
         expect(Batch.all.count).to eql 1
         expect(Collection.all.count).to eql 0
         expect(new_report.total_objects).to eql 9
-        expect(new_report.failures).to eql 0
+        expect(original_report.results[sample_pid]["status"]).to be false
+        expect(new_report.results[sample_pid]["status"]).to be true
+        expect(new_report.results[sample_pid]["object"]).to_not be_nil
       end
     end
 
   end
 
-
-
 end
-

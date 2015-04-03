@@ -1,0 +1,21 @@
+{
+  "status": true,
+  "object": {
+    "id": "rb68xc09k",
+    "class": "Batch",
+    "content_datastreams": [
+
+    ],
+    "rdf_datastreams": [
+
+    ],
+    "permissions": null,
+    "dates": {
+      "uploaded": null,
+      "modified": null
+    }
+  },
+  "relationships": [
+
+  ]
+}
