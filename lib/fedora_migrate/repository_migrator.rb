@@ -40,7 +40,7 @@ module FedoraMigrate
       source_objects.each do |object|
         @source = object
         @result = find_or_create_single_object_report
-        migrate_relationship
+        migrate_relationship unless blacklist.include?(source.pid)
       end
     end
 
@@ -84,6 +84,7 @@ module FedoraMigrate
     end
 
     def migration_required?
+      return false if blacklist.include?(source.pid)
       return true if report.results[source.pid].nil?
       !report.results[source.pid]["status"]
     end

@@ -102,6 +102,15 @@ describe "Migrating the repository" do
       end
     end
 
+    context "with a blacklist" do
+      let(:pid1) { "sufia:rb68xc089" }
+      let(:pid2) { "sufia:xp68km39w" }
+      let(:report) { FedoraMigrate::MigrationReport.new }
+      before { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata", blacklist: [pid1, pid2]}) }
+      subject { report.results.keys }
+      it { is_expected.to_not include(pid1)}
+    end
+
   end
 
 end

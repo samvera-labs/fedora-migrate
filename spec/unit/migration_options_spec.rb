@@ -58,4 +58,22 @@ describe FedoraMigrate::MigrationOptions do
     end
   end
 
+  describe "#blacklist" do
+    context "by default" do
+      subject { TestCase.new.blacklist }
+      it { is_expected.to be_empty }
+    end
+    context "with a list of pids" do
+      let(:blacklist) { ["pid1, pid2"] }
+      subject do
+        TestCase.new.tap do |example| 
+          example.options = { blacklist: blacklist }
+        end
+      end
+      it "returns the list of pids" do
+        expect(subject.blacklist).to eql blacklist
+      end
+    end
+  end
+
 end
