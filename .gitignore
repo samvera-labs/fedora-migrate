@@ -15,4 +15,4 @@ mkmf.log
 jetty
 .ruby-version
 .rvmrc
-report.json
+migration_report

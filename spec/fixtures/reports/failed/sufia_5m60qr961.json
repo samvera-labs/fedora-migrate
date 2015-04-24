@@ -1,0 +1,58 @@
+{
+  "status": true,
+  "object": {
+    "id": "5m60qr961",
+    "class": "GenericFile",
+    "content_datastreams": [
+      {
+        "ds": "content",
+        "versions": [
+          {
+            "name": "file1.txt",
+            "mime_type": "text/plain",
+            "original_date": "2015-01-19T21:32:49Z"
+          }
+        ]
+      },
+      {
+        "ds": "thumbnail",
+        "versions": [
+          {
+            "error": "Nil source -- it's probably defined in the target but not present in the source"
+          }
+        ]
+      },
+      {
+        "ds": "characterization",
+        "versions": [
+          {
+            "error": "Nil source -- it's probably defined in the target but not present in the source"
+          }
+        ]
+      }
+    ],
+    "rdf_datastreams": [
+      {
+        "ds": "descMetadata",
+        "status": [
+
+        ]
+      }
+    ],
+    "permissions": [
+      "read_groups = []",
+      "edit_groups = []",
+      "discover_groups = []",
+      "read_users = []",
+      "edit_users = [\"awead@psu.edu\"]",
+      "discover_users = []"
+    ],
+    "dates": {
+      "uploaded": null,
+      "modified": null
+    }
+  },
+  "relationships": [
+    "http://localhost:8983/fedora/rest/test/5m60qr961--info:fedora/fedora-system:def/relations-external#isPartOf--http://localhost:8983/fedora/rest/test/5m60qr94g"
+  ]
+}

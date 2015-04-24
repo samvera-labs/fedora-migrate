@@ -1,0 +1,54 @@
+{
+  "status": true,
+  "object": {
+    "id": "xp68km39w",
+    "class": "GenericFile",
+    "content_datastreams": [
+      {
+        "ds": "content",
+        "versions": [
+
+        ]
+      },
+      {
+        "ds": "thumbnail",
+        "versions": [
+          {
+            "error": "Nil source -- it's probably defined in the target but not present in the source"
+          }
+        ]
+      },
+      {
+        "ds": "characterization",
+        "versions": [
+          {
+            "error": "Nil source -- it's probably defined in the target but not present in the source"
+          }
+        ]
+      }
+    ],
+    "rdf_datastreams": [
+      {
+        "ds": "descMetadata",
+        "status": [
+
+        ]
+      }
+    ],
+    "permissions": [
+      "read_groups = []",
+      "edit_groups = []",
+      "discover_groups = []",
+      "read_users = []",
+      "edit_users = [\"awead@psu.edu\"]",
+      "discover_users = []"
+    ],
+    "dates": {
+      "uploaded": null,
+      "modified": null
+    }
+  },
+  "relationships": [
+
+  ]
+}

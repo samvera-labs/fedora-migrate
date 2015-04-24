@@ -3,7 +3,7 @@ module FedoraMigrate
 
     include MigrationOptions
 
-    attr_accessor :source_objects, :namespace, :report
+    attr_accessor :source_objects, :namespace, :report, :source, :result
 
     SingleObjectReport = Struct.new(:status, :object, :relationships)
 
@@ -16,20 +16,36 @@ module FedoraMigrate
     end
 
     def migrate_objects
-      source_objects.each { |source| migrate_object(source) }
+      source_objects.each do |object|
+        @source = object
+        migrate_current_object
+      end
+      report.reload
+    end
+
+    def migrate_current_object
+      return unless migration_required?
+      initialize_report
+      migrate_object
+    end
+
+    def initialize_report
+      @result = SingleObjectReport.new
+      @result.status = false
+      report.save(source.pid, @result)
     end
 
     def migrate_relationships
       return "Relationship migration halted because #{failures.to_s} objects didn't migrate successfully." if failures > 0 && not_forced?
-      source_objects.each { |source| migrate_relationship(source) }
+      source_objects.each do |object|
+        @source = object
+        @result = find_or_create_single_object_report
+        migrate_relationship unless blacklist.include?(source.pid)
+      end
     end
 
     def get_source_objects
-      if report.empty?
-        FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
-      else
-        report.failed_objects.map { |o| FedoraMigrate.source.connection.find(o) }
-      end
+      FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
     end
 
     def failures
@@ -38,28 +54,24 @@ module FedoraMigrate
 
     private
 
-    def migrate_object source
-      object_report = SingleObjectReport.new
-      begin
-        object_report.object = FedoraMigrate::ObjectMover.new(source, nil, options).migrate
-        object_report.status = true
-      rescue StandardError => e
-        object_report.object = e.inspect
-        object_report.status = false
-      end
-      report.results[source.pid] = object_report
+    def migrate_object
+      result.object = FedoraMigrate::ObjectMover.new(source, nil, options).migrate
+      result.status = true
+    rescue StandardError => e
+      result.object = e.inspect
+      result.status = false
+    ensure
+      report.save(source.pid, result)
     end
 
-    def migrate_relationship source
-      relationship_report = find_or_create_single_object_report(source)
-      begin
-        relationship_report.relationships = FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
-        relationship_report.status = true
-      rescue StandardError => e
-        relationship_report.relationships = e.inspect
-        relationship_report.status = false
-      end
-      report.results[source.pid] = relationship_report
+    def migrate_relationship
+      result.relationships = FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+      result.status = true
+    rescue StandardError => e
+      result.relationships = e.inspect
+      result.status = false
+    ensure
+      report.save(source.pid, result)
     end
 
     def repository_namespace
@@ -71,8 +83,19 @@ module FedoraMigrate
       return object if name.match(namespace)
     end
 
-    def find_or_create_single_object_report source
-      report.results[source.pid] || SingleObjectReport.new
+    def migration_required?
+      return false if blacklist.include?(source.pid)
+      return true if report.results[source.pid].nil?
+      !report.results[source.pid]["status"]
     end
+
+    def find_or_create_single_object_report
+      if report.results[source.pid].nil?
+        SingleObjectReport.new
+      else
+        SingleObjectReport.new(report.results[source.pid]["status"],report.results[source.pid]["object"],report.results[source.pid]["relationships"])
+      end
+    end
+
   end
 end

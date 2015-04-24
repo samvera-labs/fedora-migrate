@@ -1,0 +1,34 @@
+{
+  "status": true,
+  "object": {
+    "id": "5m60qr979",
+    "class": "Collection",
+    "content_datastreams": [
+
+    ],
+    "rdf_datastreams": [
+      {
+        "ds": "descMetadata",
+        "status": [
+
+        ]
+      }
+    ],
+    "permissions": [
+      "read_groups = [\"public\"]",
+      "edit_groups = []",
+      "discover_groups = []",
+      "read_users = []",
+      "edit_users = [\"awead@psu.edu\"]",
+      "discover_users = []"
+    ],
+    "dates": {
+      "uploaded": "2015-01-19T21:34:23.805Z",
+      "modified": "2015-03-03T18:48:51.16Z"
+    }
+  },
+  "relationships": [
+    "http://localhost:8983/fedora/rest/test/5m60qr979--info:fedora/fedora-system:def/relations-external#hasCollectionMember--http://localhost:8983/fedora/rest/test/5m60qr95r",
+    "http://localhost:8983/fedora/rest/test/5m60qr979--info:fedora/fedora-system:def/relations-external#hasCollectionMember--http://localhost:8983/fedora/rest/test/5m60qr961"
+  ]
+}

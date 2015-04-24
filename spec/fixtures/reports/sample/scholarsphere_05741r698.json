@@ -1,0 +1,26 @@
+{
+  "status": true,
+  "object": {
+    "id": "05741r698",
+    "class": "Batch",
+    "content_datastreams": [
+
+    ],
+    "rdf_datastreams": [
+      {
+        "ds": "descMetadata",
+        "status": [
+
+        ]
+      }
+    ],
+    "permissions": null,
+    "dates": {
+      "uploaded": null,
+      "modified": null
+    }
+  },
+  "relationships": [
+
+  ]
+}

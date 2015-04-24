@@ -1,0 +1,49 @@
+{
+  "status": true,
+  "object": {
+    "id": "rb68xc11m",
+    "class": "GenericFile",
+    "content_datastreams": [
+      {
+        "ds": "content",
+        "versions": [
+
+        ]
+      },
+      {
+        "ds": "thumbnail",
+        "versions": [
+          {
+            "error": "Nil source -- it's probably defined in the target but not present in the source"
+          }
+        ]
+      },
+      {
+        "ds": "characterization",
+        "versions": [
+          {
+            "error": "Nil source -- it's probably defined in the target but not present in the source"
+          }
+        ]
+      }
+    ],
+    "rdf_datastreams": [
+
+    ],
+    "permissions": [
+      "read_groups = []",
+      "edit_groups = []",
+      "discover_groups = []",
+      "read_users = []",
+      "edit_users = [\"otherUser\"]",
+      "discover_users = []"
+    ],
+    "dates": {
+      "uploaded": null,
+      "modified": null
+    }
+  },
+  "relationships": [
+    "http://localhost:8983/fedora/rest/test/rb68xc11m--info:fedora/fedora-system:def/relations-external#isPartOf--http://localhost:8983/fedora/rest/test/rb68xc09k"
+  ]
+}

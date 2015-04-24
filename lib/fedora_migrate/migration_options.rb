@@ -18,6 +18,11 @@ module FedoraMigrate
     def application_creates_versions?
       option_true?(:application_creates_versions)
     end
+
+    def blacklist
+      return [] if options.nil?
+      options.fetch(:blacklist, [])
+    end
     
     private
     

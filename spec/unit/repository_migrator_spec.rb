@@ -8,16 +8,10 @@ describe FedoraMigrate::RepositoryMigrator do
   it { is_expected.to respond_to(:report) }
   it { is_expected.to respond_to(:namespace) }
 
-  def mock_report content
-    report = FedoraMigrate::MigrationReport.new 
-    report.results = JSON.parse(content.to_json)
-    report
-  end
-
   describe "#failures" do
     context "when objects have failed to migrate" do
       let(:failing_report) { { "sufia:rb68xc089" => FedoraMigrate::RepositoryMigrator::SingleObjectReport.new(false, "objects", "relationships") } }
-      before { allow_any_instance_of(FedoraMigrate::RepositoryMigrator).to receive(:report).and_return(mock_report(failing_report)) }
+      before { allow_any_instance_of(FedoraMigrate::MigrationReport).to receive(:results).and_return(failing_report) }
       subject do
         migrator = FedoraMigrate::RepositoryMigrator.new(namespace)
         migrator.failures
@@ -26,7 +20,7 @@ describe FedoraMigrate::RepositoryMigrator do
     end
     context "when all objects have migrated" do
       let(:passing_report) { { "sufia:rb68xc089" => FedoraMigrate::RepositoryMigrator::SingleObjectReport.new(true, "objects", "relationships") } }
-      before { allow_any_instance_of(FedoraMigrate::RepositoryMigrator).to receive(:report).and_return(mock_report(passing_report)) }
+      before { allow_any_instance_of(FedoraMigrate::MigrationReport).to receive(:results).and_return(passing_report) }
       subject do
         migrator = FedoraMigrate::RepositoryMigrator.new(namespace)
         migrator.failures

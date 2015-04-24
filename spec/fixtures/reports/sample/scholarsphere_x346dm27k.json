@@ -1,0 +1,5 @@
+{
+  "status": false,
+  "object": "#<Ldp::BadRequest: RDF was not parsable>",
+  "relationships": "#<FedoraMigrate::Errors::MigrationError: Target object was not found in Fedora 4. Did you migrate it?>"
+}

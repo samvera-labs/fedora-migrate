@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe FedoraMigrate::MigrationReport do
 
-  let(:existing_report) { FedoraMigrate::MigrationReport.new("spec/fixtures/sample-report.json") }
+  let(:path)            { "spec/fixtures/reports/sample" }
+  let(:default_path)    { "migration_report" }
+  let(:existing_report) { FedoraMigrate::MigrationReport.new(path) }
   let(:new_report)      { FedoraMigrate::MigrationReport.new }
 
   context "with an existing report" do
@@ -11,6 +13,10 @@ describe FedoraMigrate::MigrationReport do
     describe "::results" do
       subject { existing_report.results }
       it { is_expected.to be_kind_of(Hash) }
+    end
+    describe "::path" do
+      subject { existing_report.path }
+      it { is_expected.to eql path }
     end
     describe "::failed_objects" do
       subject { existing_report.failed_objects }
@@ -31,17 +37,11 @@ describe FedoraMigrate::MigrationReport do
       it { is_expected.to be_kind_of(String) }
     end
     describe "::save" do
-      context "with the default path" do
-        it "should write the report" do
-          expect(File).to receive(:write).with("report.json", "{\n}")
-          new_report.save
-        end
-      end
-      context "with a user-provided path" do
-        it "should write the report" do
-          expect(File).to receive(:write).with("foo/path/report.json", "{\n}")
-          new_report.save("foo/path")
-        end
+      let(:individual_report) { Hash.new }
+      let(:pid) { "some:pid" }
+      it "should write the report" do
+        expect(File).to receive(:write).with("migration_report/some_pid.json", "{\n}")
+        new_report.save(pid, individual_report)
       end
     end
   end
@@ -53,6 +53,9 @@ describe FedoraMigrate::MigrationReport do
       subject { new_report.results }
       it { is_expected.to be_kind_of(Hash) }
     end
+    describe "::path" do
+      subject { new_report.path }
+      it { is_expected.to eql default_path }
+    end
   end
-
 end
