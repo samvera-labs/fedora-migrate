@@ -52,10 +52,12 @@ as an example:
 ``` ruby
 desc "Migrate all my objects"
 task migrate: :environment do
-  results = FedoraMigrate.migrate_repository(namespace: "mynamespace")
+  results = FedoraMigrate.migrate_repository("mynamespace")
   puts results
 end
 ```
+
+Where `mynamespace` is your Fedora 3 pid namespace.
 
 Run the task
 
