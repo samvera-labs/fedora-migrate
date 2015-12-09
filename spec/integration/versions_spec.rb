@@ -24,6 +24,7 @@ describe "Versions" do
   end
 
   it "should be migrated in the order they were created with their original creation dates" do
+    pending "Requires fix to Fedora 4.4; awaiting release"
     expect(desc_metadata_source_versions[0].createDate.to_i).to eql date_created_by_application("version1")
     expect(desc_metadata_source_versions[1].createDate.to_i).to eql date_created_by_application("version2")
     expect(desc_metadata_source_versions[2].createDate.to_i).to eql date_created_by_application("version3")

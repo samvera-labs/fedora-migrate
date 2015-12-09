@@ -8,7 +8,12 @@ Gem::Specification.all.each do |g|
   HAC_DIR = g.gem_dir if g.name.match("hydra-access-controls")
   HCL_DIR = g.gem_dir if g.name.match("hydra-collections")
   HCR_DIR = g.gem_dir if g.name.match("hydra-core")
+  BKL_DIR = g.gem_dir if g.name.match("blacklight")
 end
+
+# Load Rails-specific bits of blacklight
+require BKL_DIR+'/app/controllers/concerns/blacklight/request_builders'
+require BKL_DIR+'/app/controllers/concerns/blacklight/search_helper'
 
 # Load Rails-specific bits of hydra-access-controls
 require HAC_DIR+'/app/vocabularies/acl'
@@ -47,7 +52,7 @@ module ExampleModel
   end
 
   class VersionedDatastream < ActiveFedora::File
-    has_many_versions
+    self.versionable = true
   end
 
   class VersionedContent < ActiveFedora::Base

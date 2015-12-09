@@ -8,7 +8,7 @@ module FedoraMigrate
 
     def load_fedora3_config
       return @fedora_config unless @fedora_config.empty?
-      @fedora_config_path = get_config_path(:fedora3)
+      @fedora_config_path = config_path(:fedora3)
       Logger.info("loading fedora config from #{::File.expand_path(@fedora_config_path)}")
 
       begin
