@@ -1,24 +1,21 @@
 require 'spec_helper'
 
-describe "Migrating the repository" do
-
+describe FedoraMigrate do
   context "when no target objects are defined" do
-
     before do
       Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
       Object.send(:remove_const, :Batch) if defined?(Batch)
       Object.send(:remove_const, :Collection) if defined?(Collection)
     end
 
-    subject { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"}).report }
+    subject { described_class.migrate_repository(namespace: "sufia", options: { convert: "descMetadata" }).report }
 
-    it "should report warnings" do
+    it "reports warnings" do
       expect(subject.failed_objects.count).to eql 9
     end
   end
 
   context "when all target objects are defined" do
-
     before do
       Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
       class GenericFile < ExampleModel::MigrationObject
@@ -52,8 +49,8 @@ describe "Migrating the repository" do
     let(:versions_report) { GenericFile.all.map { |f| f.content.versions.count }.uniq }
 
     context "by default" do
-      before { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata"}) }
-      it "should move every object and its versions" do
+      before { described_class.migrate_repository(namespace: "sufia", options: { convert: "descMetadata" }) }
+      it "moves every object and its versions" do
         expect(file1.title).to eql ["world.png"]
         expect(file2.title).to eql ["Sample Migration Object A"]
         expect(file2.creator).to eql ["Adam Wead"]
@@ -63,17 +60,17 @@ describe "Migrating the repository" do
         expect(Batch.all.last.generic_files.count).to eql 2
         expect(Collection.all.count).to eql 1
         expect(Collection.first.members.count).to eql 2
-        expect(versions_report).to match_array [0,3,9]
+        expect(versions_report).to match_array [0, 3, 9]
       end
     end
 
     context "and the application will create versions" do
       before do
-        FedoraMigrate.migrate_repository(namespace: "sufia", 
-          options: {convert: "descMetadata", application_creates_versions: true}
-        )
+        described_class.migrate_repository(namespace: "sufia",
+                                           options: { convert: "descMetadata", application_creates_versions: true }
+                                          )
       end
-      it "should move every object but not its versions" do
+      it "moves every object but not its versions" do
         expect(file1.title).to eql ["world.png"]
         expect(versions_report).to eql [0]
       end
@@ -88,7 +85,7 @@ describe "Migrating the repository" do
       before do
         FileUtils.rm_rf(failed_report)
         FileUtils.cp_r(sample_report, failed_report)
-        migrator = FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata", report: failed_report})
+        described_class.migrate_repository(namespace: "sufia", options: { convert: "descMetadata", report: failed_report })
       end
       after { FileUtils.rm_rf(failed_report) }
       it "only migrates the objects that have failed" do
@@ -106,11 +103,9 @@ describe "Migrating the repository" do
       let(:pid1) { "sufia:rb68xc089" }
       let(:pid2) { "sufia:xp68km39w" }
       let(:report) { FedoraMigrate::MigrationReport.new }
-      before { FedoraMigrate.migrate_repository(namespace: "sufia", options: {convert: "descMetadata", blacklist: [pid1, pid2]}) }
+      before { described_class.migrate_repository(namespace: "sufia", options: { convert: "descMetadata", blacklist: [pid1, pid2] }) }
       subject { report.results.keys }
-      it { is_expected.to_not include(pid1)}
+      it { is_expected.to_not include(pid1) }
     end
-
   end
-
 end

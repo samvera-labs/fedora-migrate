@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe FedoraMigrate::MigrationOptions do
-
   class TestCase
     include FedoraMigrate::MigrationOptions
   end
@@ -66,7 +65,7 @@ describe FedoraMigrate::MigrationOptions do
     context "with a list of pids" do
       let(:blacklist) { ["pid1, pid2"] }
       subject do
-        TestCase.new.tap do |example| 
+        TestCase.new.tap do |example|
           example.options = { blacklist: blacklist }
         end
       end
@@ -75,5 +74,4 @@ describe FedoraMigrate::MigrationOptions do
       end
     end
   end
-
 end

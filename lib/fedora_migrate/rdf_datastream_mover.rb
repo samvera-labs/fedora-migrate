@@ -2,7 +2,6 @@ require 'rchardet'
 
 module FedoraMigrate
   class RDFDatastreamMover < Mover
-
     def migrate
       before_rdf_datastream_migration
       migrate_rdf_triples
@@ -22,7 +21,7 @@ module FedoraMigrate
       end
 
       def updated_datastream_content
-        correct_encoding(datastream_content).gsub(/<.+#{source.pid}>/,"<#{target.uri}>")
+        correct_encoding(datastream_content).gsub(/<.+#{source.pid}>/, "<#{target.uri}>")
       end
 
       def datastream_content

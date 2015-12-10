@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe FedoraMigrate::MigrationReport do
-
   let(:path)            { "spec/fixtures/reports/sample" }
   let(:default_path)    { "migration_report" }
-  let(:existing_report) { FedoraMigrate::MigrationReport.new(path) }
-  let(:new_report)      { FedoraMigrate::MigrationReport.new }
+  let(:existing_report) { described_class.new(path) }
+  let(:new_report)      { described_class.new }
 
   context "with an existing report" do
     subject { existing_report }
@@ -23,7 +22,7 @@ describe FedoraMigrate::MigrationReport do
       it { is_expected.to include("scholarsphere:6395wb555", "scholarsphere:x346dm27k") }
     end
     describe "::failures" do
-      subject { existing_report.failures }    
+      subject { existing_report.failures }
       context "when the report contains failed migrations" do
         it { is_expected.to eq 2 }
       end
@@ -33,13 +32,13 @@ describe FedoraMigrate::MigrationReport do
       it { is_expected.to eq 5 }
     end
     describe "::report_failures" do
-      subject { existing_report.report_failures }   
+      subject { existing_report.report_failures }
       it { is_expected.to be_kind_of(String) }
     end
     describe "::save" do
       let(:individual_report) { Hash.new }
       let(:pid) { "some:pid" }
-      it "should write the report" do
+      it "writes the report" do
         expect(File).to receive(:write).with("migration_report/some_pid.json", "{\n}")
         new_report.save(pid, individual_report)
       end

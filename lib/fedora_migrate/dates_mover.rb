@@ -1,6 +1,5 @@
 module FedoraMigrate
   class DatesMover < Mover
-
     Report = Struct.new(:uploaded, :modified)
 
     def migrate
@@ -22,6 +21,5 @@ module FedoraMigrate
       target.date_modified = source.lastModifiedDate
       report.modified = source.lastModifiedDate
     end
-
   end
 end

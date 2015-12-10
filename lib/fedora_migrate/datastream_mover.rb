@@ -1,6 +1,5 @@
 module FedoraMigrate
   class DatastreamMover < Mover
-
     attr_accessor :versionable
 
     def post_initialize
@@ -28,33 +27,31 @@ module FedoraMigrate
 
     private
 
-    def migrate_datastream
-      if versionable?
-        migrate_versions
-      else
-        migrate_current
+      def migrate_datastream
+        if versionable?
+          migrate_versions
+        else
+          migrate_current
+        end
       end
-    end
 
-    # Reload the target, otherwise the checksum is nil
-    def migrate_current
-      migrate_content
-      target.reload if report.last.success?
-    end
-
-    # Rubydora stores the versions array as the most recent first. We explicitly sort them according to createDate
-    def migrate_versions
-      source.versions.sort { |a,b| a.createDate <=> b.createDate }.each do |version|
-        migrate_content(version)
-        target.create_version if report.last.success? && !application_creates_versions?
+      # Reload the target, otherwise the checksum is nil
+      def migrate_current
+        migrate_content
+        target.reload if report.last.success?
       end
-    end
 
-    def migrate_content datastream=nil
-      datastream ||= source
-      report << FedoraMigrate::ContentMover.new(datastream, target).migrate
-    end
+      # Rubydora stores the versions array as the most recent first. We explicitly sort them according to createDate
+      def migrate_versions
+        source.versions.sort { |a, b| a.createDate <=> b.createDate }.each do |version|
+          migrate_content(version)
+          target.create_version if report.last.success? && !application_creates_versions?
+        end
+      end
 
+      def migrate_content(datastream = nil)
+        datastream ||= source
+        report << FedoraMigrate::ContentMover.new(datastream, target).migrate
+      end
   end
-
 end

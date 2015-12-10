@@ -1,17 +1,15 @@
 module FedoraMigrate
   class RepositoryMigrator
-
     include MigrationOptions
 
     attr_accessor :source_objects, :namespace, :report, :source, :result
 
     SingleObjectReport = Struct.new(:status, :object, :relationships)
 
-    def initialize namespace = nil, options = {}
+    def initialize(namespace = nil, options = {})
       @namespace = namespace || repository_namespace
       @options = options
       @report = MigrationReport.new(@options.fetch(:report, nil))
-      @source_objects = get_source_objects
       conversion_options
     end
 
@@ -36,7 +34,7 @@ module FedoraMigrate
     end
 
     def migrate_relationships
-      return "Relationship migration halted because #{failures.to_s} objects didn't migrate successfully." if failures > 0 && not_forced?
+      return "Relationship migration halted because #{failures} objects didn't migrate successfully." if failures > 0 && not_forced?
       source_objects.each do |object|
         @source = object
         @result = find_or_create_single_object_report
@@ -44,8 +42,8 @@ module FedoraMigrate
       end
     end
 
-    def get_source_objects
-      FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
+    def source_objects
+      @source_objects ||= FedoraMigrate.source.connection.search(nil).collect { |o| qualifying_object(o) }.compact
     end
 
     def failures
@@ -54,48 +52,47 @@ module FedoraMigrate
 
     private
 
-    def migrate_object
-      result.object = FedoraMigrate::ObjectMover.new(source, nil, options).migrate
-      result.status = true
-    rescue StandardError => e
-      result.object = e.inspect
-      result.status = false
-    ensure
-      report.save(source.pid, result)
-    end
-
-    def migrate_relationship
-      result.relationships = FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
-      result.status = true
-    rescue StandardError => e
-      result.relationships = e.inspect
-      result.status = false
-    ensure
-      report.save(source.pid, result)
-    end
-
-    def repository_namespace
-      FedoraMigrate.source.connection.repository_profile["repositoryPID"]["repositoryPID"].split(/:/).first.strip
-    end
-
-    def qualifying_object object
-      name = object.pid.split(/:/).first
-      return object if name.match(namespace)
-    end
-
-    def migration_required?
-      return false if blacklist.include?(source.pid)
-      return true if report.results[source.pid].nil?
-      !report.results[source.pid]["status"]
-    end
-
-    def find_or_create_single_object_report
-      if report.results[source.pid].nil?
-        SingleObjectReport.new
-      else
-        SingleObjectReport.new(report.results[source.pid]["status"],report.results[source.pid]["object"],report.results[source.pid]["relationships"])
+      def migrate_object
+        result.object = FedoraMigrate::ObjectMover.new(source, nil, options).migrate
+        result.status = true
+      rescue StandardError => e
+        result.object = e.inspect
+        result.status = false
+      ensure
+        report.save(source.pid, result)
       end
-    end
 
+      def migrate_relationship
+        result.relationships = FedoraMigrate::RelsExtDatastreamMover.new(source).migrate
+        result.status = true
+      rescue StandardError => e
+        result.relationships = e.inspect
+        result.status = false
+      ensure
+        report.save(source.pid, result)
+      end
+
+      def repository_namespace
+        FedoraMigrate.source.connection.repository_profile["repositoryPID"]["repositoryPID"].split(/:/).first.strip
+      end
+
+      def qualifying_object(object)
+        name = object.pid.split(/:/).first
+        return object if name.match(namespace)
+      end
+
+      def migration_required?
+        return false if blacklist.include?(source.pid)
+        return true if report.results[source.pid].nil?
+        !report.results[source.pid]["status"]
+      end
+
+      def find_or_create_single_object_report
+        if report.results[source.pid].nil?
+          SingleObjectReport.new
+        else
+          SingleObjectReport.new(report.results[source.pid]["status"], report.results[source.pid]["object"], report.results[source.pid]["relationships"])
+        end
+      end
   end
 end

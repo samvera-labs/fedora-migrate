@@ -2,12 +2,20 @@ require 'fedora-migrate'
 require 'rspec/core'
 require 'rspec/core/rake_task'
 require 'jettywrapper'
+require 'rubocop/rake_task'
+
 Jettywrapper.url = "https://github.com/projecthydra/hydra-jetty/archive/migrate.zip"
 
 RSpec::Core::RakeTask.new(:spec)
 
+desc 'Run style checker'
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.requires << 'rubocop-rspec'
+  task.fail_on_error = true
+end
+
 desc "Run continuous integration tests"
-task ci: ['jetty:clean'] do
+task ci: [:rubocop, 'jetty:clean'] do
   jetty_params = Jettywrapper.load_config
   error = Jettywrapper.wrap(jetty_params) do
     Rake::Task['fixtures:load'].invoke
