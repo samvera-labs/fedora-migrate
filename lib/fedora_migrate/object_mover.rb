@@ -37,6 +37,10 @@ module FedoraMigrate
       save
     end
 
+    def target
+      @target ||= FedoraMigrate::TargetConstructor.new(source).build
+    end
+
     private
 
       def migrate_datastreams
@@ -74,12 +78,6 @@ module FedoraMigrate
 
       def migrate_dates
         report.dates = FedoraMigrate::DatesMover.new(source, target).migrate
-      end
-
-      def create_target_model
-        builder = FedoraMigrate::TargetConstructor.new(source.models).build
-        raise FedoraMigrate::Errors::MigrationError, "No qualified targets found in #{source.pid}" if builder.target.nil?
-        @target = builder.target.new(id: id_component)
       end
   end
 end

@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe FedoraMigrate::ObjectMover do
-  before do
-    allow_any_instance_of(described_class).to receive(:create_target_model).and_return("foo")
-  end
+  let(:mock_target) { double("Target", id: "1234") }
+  before { allow_any_instance_of(described_class).to receive(:target).and_return(mock_target) }
 
   describe "#new" do
     it { is_expected.to respond_to :source }
@@ -12,9 +11,7 @@ describe FedoraMigrate::ObjectMover do
   end
 
   describe "#prepare_target" do
-    subject do
-      described_class.new("source", double("Target", id: nil)).prepare_target
-    end
+    subject { described_class.new("source", double("Target", id: nil)).prepare_target }
     it "calls the before hook and save the target" do
       expect_any_instance_of(described_class).to receive(:before_object_migration)
       expect(subject).to be nil
@@ -22,9 +19,7 @@ describe FedoraMigrate::ObjectMover do
   end
 
   describe "#complete_target" do
-    subject do
-      described_class.new("source", double("Target", id: nil)).complete_target
-    end
+    subject { described_class.new("source", double("Target", id: nil)).complete_target }
     it "calls the after hook and save the target" do
       expect_any_instance_of(described_class).to receive(:after_object_migration)
       expect_any_instance_of(described_class).to receive(:save).and_return(true)
