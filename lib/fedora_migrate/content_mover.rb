@@ -1,6 +1,5 @@
 module FedoraMigrate
   class ContentMover < Mover
-
     include DatastreamVerification
 
     class Report
@@ -36,13 +35,13 @@ module FedoraMigrate
     end
 
     def insert_date_created_by_application
-      result = perform_sparql_insert 
+      result = perform_sparql_insert
       report.original_date = source.createDate.iso8601
       report.error = "There was a problem with sparql #{result.status} #{result.body}" unless result.status == 204
     end
 
     def sparql_insert
-<<-EOF
+      <<-EOF
 PREFIX premis: <http://www.loc.gov/premis/rdf/v1#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 DELETE WHERE { ?s premis:hasDateCreatedByApplication ?o } ;
@@ -55,17 +54,14 @@ EOF
 
     private
 
-    def perform_sparql_insert
-      ActiveFedora.fedora.connection.patch(target.metadata.metadata_uri, sparql_insert, "Content-Type" => "application/sparql-update")
-    end
+      def perform_sparql_insert
+        ActiveFedora.fedora.connection.patch(target.metadata.metadata_uri, sparql_insert, "Content-Type" => "application/sparql-update")
+      end
 
-    def nil_source
-      if source.content.nil?
+      def nil_source
+        return unless source.content.nil?
         report.error = "Nil source -- it's probably defined in the target but not present in the source"
         true
       end
-    end
-
   end
-
 end

@@ -1,6 +1,5 @@
 module FedoraMigrate
   class FileConfigurator < ActiveFedora::FileConfigurator
-
     def fedora3_config
       load_fedora3_config
       @fedora_config
@@ -13,8 +12,8 @@ module FedoraMigrate
 
       begin
         config_erb = ERB.new(IO.read(@fedora_config_path)).result(binding)
-      rescue Exception => e
-        raise("fedora.yml was found, but could not be parsed with ERB. \n#{$!.inspect}")
+      rescue StandardError
+        raise("fedora.yml was found, but could not be parsed with ERB. \n#{$ERROR_INFO.inspect}")
       end
 
       begin
@@ -27,8 +26,7 @@ module FedoraMigrate
       config = fedora_yml.symbolize_keys
 
       cfg = config[ActiveFedora.environment.to_sym] || {}
-      @fedora_config = cfg.kind_of?(Array) ? cfg.map(&:symbolize_keys) : cfg.symbolize_keys
+      @fedora_config = cfg.is_a?(Array) ? cfg.map(&:symbolize_keys) : cfg.symbolize_keys
     end
-
   end
 end

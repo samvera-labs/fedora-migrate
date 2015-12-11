@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe FedoraMigrate::ObjectMover do
-
   before do
-    allow_any_instance_of(FedoraMigrate::ObjectMover).to receive(:create_target_model).and_return("foo")
+    allow_any_instance_of(described_class).to receive(:create_target_model).and_return("foo")
   end
 
   describe "#new" do
@@ -14,23 +13,22 @@ describe FedoraMigrate::ObjectMover do
 
   describe "#prepare_target" do
     subject do
-      FedoraMigrate::ObjectMover.new("source", double("Target", id: nil)).prepare_target
+      described_class.new("source", double("Target", id: nil)).prepare_target
     end
-    it "should call the before hook and save the target" do
-      expect_any_instance_of(FedoraMigrate::ObjectMover).to receive(:before_object_migration)
+    it "calls the before hook and save the target" do
+      expect_any_instance_of(described_class).to receive(:before_object_migration)
       expect(subject).to be nil
     end
   end
 
   describe "#complete_target" do
     subject do
-      FedoraMigrate::ObjectMover.new("source", double("Target", id: nil)).complete_target
+      described_class.new("source", double("Target", id: nil)).complete_target
     end
-    it "should call the after hook and save the target" do
-      expect_any_instance_of(FedoraMigrate::ObjectMover).to receive(:after_object_migration)
-      expect_any_instance_of(FedoraMigrate::ObjectMover).to receive(:save).and_return(true)
+    it "calls the after hook and save the target" do
+      expect_any_instance_of(described_class).to receive(:after_object_migration)
+      expect_any_instance_of(described_class).to receive(:save).and_return(true)
       expect(subject).to be true
     end
   end
-
 end

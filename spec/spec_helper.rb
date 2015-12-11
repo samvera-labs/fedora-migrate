@@ -32,16 +32,15 @@ RSpec.configure do |config|
   # Have a clean slate for every test
   config.before(:each) do
     ActiveFedora::Cleaner.clean!
-    ActiveFedora::SolrService.instance.conn.delete_by_query('*:*', params: {'softCommit' => true})
+    ActiveFedora::SolrService.instance.conn.delete_by_query('*:*', params: { 'softCommit' => true })
     FileUtils.rm_rf(FedoraMigrate::MigrationReport::DEFAULT_PATH)
   end
 
   config.order = :random
 
   config.include ExampleModel
-
 end
 
-def load_fixture file
+def load_fixture(file)
   File.open("spec/fixtures/datastreams/#{file}")
 end

@@ -1,4 +1,4 @@
-# Shenanigans because we're not in a Rails environment and we need to load bits of 
+# Shenanigans because we're not in a Rails environment and we need to load bits of
 # code that depend on Rails in order to test migrating objects.
 Hydra::Engine.config.autoload_paths.each { |path| $LOAD_PATH.unshift path }
 # in gem version 2.4, .find_by_name isn't pulling up gems given in the Gemfile
@@ -12,32 +12,31 @@ Gem::Specification.all.each do |g|
 end
 
 # Load Rails-specific bits of blacklight
-require BKL_DIR+'/app/controllers/concerns/blacklight/request_builders'
-require BKL_DIR+'/app/controllers/concerns/blacklight/search_helper'
+require BKL_DIR + '/app/controllers/concerns/blacklight/request_builders'
+require BKL_DIR + '/app/controllers/concerns/blacklight/search_helper'
 
 # Load Rails-specific bits of hydra-access-controls
-require HAC_DIR+'/app/vocabularies/acl'
-require HAC_DIR+'/app/vocabularies/hydra/acl'
-require HAC_DIR+'/app/models/role_mapper'
-require HAC_DIR+'/app/models/ability'
-require HAC_DIR+'/app/models/hydra/access_controls/access_control_list'
-require HAC_DIR+'/app/models/hydra/access_controls/permission'
-require HAC_DIR+'/app/models/hydra/access_controls/embargo'
-require HAC_DIR+'/app/models/hydra/access_controls/lease'
-require HAC_DIR+'/app/models/concerns/hydra/with_depositor'
-require HAC_DIR+'/app/services/hydra/lease_service'
-require HAC_DIR+'/app/services/hydra/embargo_service'
-require HAC_DIR+'/app/validators/hydra/future_date_validator'
+require HAC_DIR + '/app/vocabularies/acl'
+require HAC_DIR + '/app/vocabularies/hydra/acl'
+require HAC_DIR + '/app/models/role_mapper'
+require HAC_DIR + '/app/models/ability'
+require HAC_DIR + '/app/models/hydra/access_controls/access_control_list'
+require HAC_DIR + '/app/models/hydra/access_controls/permission'
+require HAC_DIR + '/app/models/hydra/access_controls/embargo'
+require HAC_DIR + '/app/models/hydra/access_controls/lease'
+require HAC_DIR + '/app/models/concerns/hydra/with_depositor'
+require HAC_DIR + '/app/services/hydra/lease_service'
+require HAC_DIR + '/app/services/hydra/embargo_service'
+require HAC_DIR + '/app/validators/hydra/future_date_validator'
 
 # Loading hydra-collections
 require 'hydra-collections'
-require HCR_DIR+'/app/models/concerns/hydra/model_methods'
-require HCL_DIR+'/app/models/concerns/hydra/collections/metadata'
-require HCL_DIR+'/app/models/concerns/hydra/collections/relations'
-require HCL_DIR+'/app/models/concerns/hydra/collection'
+require HCR_DIR + '/app/models/concerns/hydra/model_methods'
+require HCL_DIR + '/app/models/concerns/hydra/collections/metadata'
+require HCL_DIR + '/app/models/concerns/hydra/collections/relations'
+require HCL_DIR + '/app/models/concerns/hydra/collection'
 
 module ExampleModel
-
   class RDFProperties < ActiveFedora::Base
     property :title, predicate: ::RDF::DC.title do |index|
       index.as :stored_searchable, :facetable
@@ -95,5 +94,4 @@ module ExampleModel
   class Collection < ActiveFedora::Base
     include Hydra::Collection
   end
-
 end

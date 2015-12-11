@@ -1,19 +1,18 @@
 require 'spec_helper'
 
-describe "Versioned content" do
-
+describe FedoraMigrate::DatastreamMover do
   let(:mover) do
-    FedoraMigrate::DatastreamMover.new(
-      FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"], 
+    described_class.new(
+      FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"],
       ExampleModel::VersionedContent.create.attached_files["content"]
     )
   end
 
   let(:application_mover) do
-    FedoraMigrate::DatastreamMover.new(
-      FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"], 
+    described_class.new(
+      FedoraMigrate.source.connection.find("sufia:rb68xc089").datastreams["content"],
       ExampleModel::VersionedContent.create.attached_files["content"],
-      { application_creates_versions: true }
+      application_creates_versions: true
     )
   end
 
@@ -28,10 +27,10 @@ describe "Versioned content" do
       mover.migrate
       mover.target
     end
-    it "should migrate all versions" do
+    it "migrates all versions" do
       expect(subject.versions.all.count).to eql 3
     end
-    it "should preserve metadata" do
+    it "preserves metadata" do
       expect(subject.mime_type).to eql "image/png"
       expect(subject.original_name).to eql "world.png"
     end
@@ -44,7 +43,7 @@ describe "Versioned content" do
         expect(subject.versions.count).to eql 0
       end
     end
-  end 
+  end
 
   context "without migrating versions" do
     subject do
@@ -52,14 +51,13 @@ describe "Versioned content" do
       mover.migrate
       mover.target
     end
-    it "should migrate only the most recent version" do
+    it "migrates only the most recent version" do
       expect(subject.versions.count).to eql 0
       expect(subject.content).to_not be_nil
     end
-    it "should preserve metadata" do
+    it "preserves metadata" do
       expect(subject.mime_type).to eql "image/png"
       expect(subject.original_name).to eql "world.png"
     end
   end
-
 end

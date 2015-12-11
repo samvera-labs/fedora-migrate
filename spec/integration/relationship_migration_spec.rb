@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe "Migrating objects with relationships" do
-
+describe FedoraMigrate::ObjectMover do
   before :all do
     class GenericFile < ActiveFedora::Base
       belongs_to :batch, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
@@ -26,10 +25,9 @@ describe "Migrating objects with relationships" do
   let(:child_source)  { FedoraMigrate.source.connection.find("sufia:rb68xc11m") }
 
   context "when all objects exist in Fedora4" do
-
     before do
-      FedoraMigrate::ObjectMover.new(parent_source).migrate
-      FedoraMigrate::ObjectMover.new(child_source).migrate
+      described_class.new(parent_source).migrate
+      described_class.new(child_source).migrate
     end
 
     subject { Batch.find("rb68xc09k") }
@@ -46,7 +44,5 @@ describe "Migrating objects with relationships" do
         expect(subject.generic_files.count).to eql 1
       end
     end
-
   end
-
 end

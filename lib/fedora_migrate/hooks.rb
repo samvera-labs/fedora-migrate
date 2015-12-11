@@ -5,7 +5,6 @@
 # you application and substitute methods for the ones listed below
 module FedoraMigrate
   module Hooks
-
     # Called from FedoraMigrate::ObjectMover
     def before_object_migration
     end
@@ -29,6 +28,5 @@ module FedoraMigrate
     # Called from FedoraMigrate::DatastreamMover
     def after_datastream_migration
     end
-
   end
 end

@@ -5,7 +5,7 @@ require "hydra/head"
 require "rubydora"
 
 # Loads rake tasks
-Dir[File.expand_path(File.join(File.dirname(__FILE__),"tasks/*.rake"))].each { |ext| load ext } if defined?(Rake)
+Dir[File.expand_path(File.join(File.dirname(__FILE__), "tasks/*.rake"))].each { |ext| load ext } if defined?(Rake)
 
 module FedoraMigrate
   extend ActiveSupport::Autoload
@@ -45,19 +45,17 @@ module FedoraMigrate
       @source ||= FedoraMigrate::RubydoraConnection.new(fedora_config.credentials)
     end
 
-    def find id
+    def find(id)
       FedoraMigrate.source.connection.find(id)
     end
 
-    def migrate_repository args
+    def migrate_repository(args)
       migrator = FedoraMigrate::RepositoryMigrator.new(args[:namespace], args[:options])
       migrator.migrate_objects
       migrator.migrate_relationships
       migrator
     end
-
   end
 
   self.configurator ||= FedoraMigrate::FileConfigurator.new
-
 end
