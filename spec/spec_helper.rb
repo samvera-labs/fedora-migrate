@@ -5,6 +5,7 @@ require 'fedora-migrate'
 require 'equivalent-xml/rspec_matchers'
 require 'support/example_model'
 require 'active_fedora/cleaner'
+require 'rspec/its'
 
 require 'http_logger'
 ActiveFedora::Base.logger = Logger.new(STDERR)

@@ -1,36 +1,35 @@
 module FedoraMigrate
   class TargetConstructor
-    attr_accessor :candidates, :target
+    attr_accessor :source, :candidates, :target
 
-    def initialize(candidates)
-      @candidates = candidates
+    def initialize(source)
+      @source = source
     end
 
     def build
-      determine_target
-      self
+      raise FedoraMigrate::Errors::MigrationError, "No qualified targets found in #{source.pid}" if target.nil?
+      target.new(id: FedoraMigrate::Mover.id_component(source))
+    end
+
+    def target
+      @target ||= determine_target
     end
 
     private
 
       def determine_target
-        case
-        when @candidates.is_a?(Array) then vote
-        when @candidates.is_a?(String) then vet(@candidates)
-        end
-      end
-
-      def vote
-        candidates.each do |model|
-          vet(model)
-          break unless @target.nil?
-        end
+        Array(candidates).map { |model| vet(model) }.compact.first
       end
 
       def vet(model)
-        @target = FedoraMigrate::Mover.id_component(model).constantize
+        FedoraMigrate::Mover.id_component(model).constantize
       rescue NameError
         Logger.debug "rejecting #{model} for target"
+        nil
+      end
+
+      def candidates
+        @candidates ||= source.models
       end
   end
 end
