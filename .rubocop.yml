@@ -1,7 +1,9 @@
 require: rubocop-rspec
 
+inherit_from: .rubocop_todo.yml
+
 AllCops:
-  RunRailsCops: true
+  TargetRubyVersion: 2.2
   DisplayCopNames: true
   Include:
     - '**/Rakefile'

@@ -5,10 +5,10 @@ Hydra::Engine.config.autoload_paths.each { |path| $LOAD_PATH.unshift path }
 # as opposed to those in the gemspec file.
 # This is a workaround:
 Gem::Specification.all.each do |g|
-  HAC_DIR = g.gem_dir if g.name.match("hydra-access-controls")
-  HCL_DIR = g.gem_dir if g.name.match("hydra-collections")
-  HCR_DIR = g.gem_dir if g.name.match("hydra-core")
-  BKL_DIR = g.gem_dir if g.name.match("blacklight")
+  HAC_DIR = g.gem_dir if g.name == "hydra-access-controls"
+  HCL_DIR = g.gem_dir if g.name == "hydra-collections"
+  HCR_DIR = g.gem_dir if g.name == "hydra-core"
+  BKL_DIR = g.gem_dir if g.name == "blacklight"
 end
 
 # Load Rails-specific bits of blacklight

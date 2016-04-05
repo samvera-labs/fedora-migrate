@@ -95,7 +95,7 @@ describe FedoraMigrate do
         expect(new_report.total_objects).to eql 9
         expect(original_report.results[sample_pid]["status"]).to be false
         expect(new_report.results[sample_pid]["status"]).to be true
-        expect(new_report.results[sample_pid]["object"]).to_not be_nil
+        expect(new_report.results[sample_pid]["object"]).not_to be_nil
       end
     end
 
@@ -105,7 +105,7 @@ describe FedoraMigrate do
       let(:report) { FedoraMigrate::MigrationReport.new }
       before { described_class.migrate_repository(namespace: "sufia", options: { convert: "descMetadata", blacklist: [pid1, pid2] }) }
       subject { report.results.keys }
-      it { is_expected.to_not include(pid1) }
+      it { is_expected.not_to include(pid1) }
     end
   end
 end

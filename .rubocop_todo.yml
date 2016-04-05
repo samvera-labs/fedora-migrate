@@ -1,0 +1,9 @@
+require: rubocop-rspec
+
+RSpec/AnyInstance:
+  Exclude:
+    - 'spec/**/*'
+
+Style/GuardClause:
+  Exclude:
+    - 'lib/fedora_migrate/rights_metadata.rb'

@@ -42,7 +42,7 @@ describe FedoraMigrate::RepositoryMigrator do
     context "with an explicit force" do
       subject { described_class.new(namespace, force: true) }
       it "migrates relationships" do
-        expect(subject.migrate_relationships).to_not be_nil
+        expect(subject.migrate_relationships).not_to be_nil
       end
     end
   end
@@ -67,7 +67,7 @@ describe FedoraMigrate::RepositoryMigrator do
         expect(subject.source_objects.collect(&:pid)).to include("sufia:rb68xc089", "sufia:rb68xc11m")
       end
       it "excludes fedora-system objects" do
-        expect(subject.source_objects).to_not include("fedora-system:ContentModel-3.0")
+        expect(subject.source_objects).not_to include("fedora-system:ContentModel-3.0")
         expect(subject.source_objects.count).to eql 9
       end
     end

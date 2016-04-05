@@ -13,11 +13,11 @@ describe FedoraMigrate::DatastreamMover do
 
     context "by default" do
       subject { described_class.new("foo", "bar") }
-      it { is_expected.to_not be_versionable }
+      it { is_expected.not_to be_versionable }
     end
     context "when the datastream is not versionable" do
       subject { described_class.new("source", non_versionable_target) }
-      it { is_expected.to_not be_versionable }
+      it { is_expected.not_to be_versionable }
     end
     context "when the datastream is versionable" do
       subject { described_class.new("source", versionable_target) }
@@ -28,7 +28,7 @@ describe FedoraMigrate::DatastreamMover do
           mover.versionable = false
           return mover
         end
-        it { is_expected.to_not be_versionable }
+        it { is_expected.not_to be_versionable }
       end
     end
   end

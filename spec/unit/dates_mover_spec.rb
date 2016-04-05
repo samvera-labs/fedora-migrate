@@ -16,7 +16,7 @@ describe FedoraMigrate::DatesMover do
     context "when the source methods don't exist" do
       let(:source) { instance_double('Source with no date methods') }
       it 'gracefully does nothing' do
-        expect { subject.migrate }.to_not raise_error
+        expect { subject.migrate }.not_to raise_error
         expect(target.date_uploaded).to be_nil
         expect(target.date_modified).to be_nil
       end
@@ -25,7 +25,7 @@ describe FedoraMigrate::DatesMover do
     context "when the target methods don't exist" do
       let(:target) { instance_double('Target with no date methods') }
       it 'gracefully does nothing' do
-        expect { subject.migrate }.to_not raise_error
+        expect { subject.migrate }.not_to raise_error
       end
     end
   end
