@@ -56,7 +56,7 @@ module FedoraMigrate
       end
 
       def file_from_pid(pid)
-        pid.gsub(/:/, "_") + ".json"
+        pid.tr(':', "_") + ".json"
       end
   end
 end

@@ -32,7 +32,7 @@ describe FedoraMigrate::ObjectMover do
         mover.target
       end
       it "migrates the object without warnings" do
-        expect(FedoraMigrate::Logger).to_not receive(:warn)
+        expect(FedoraMigrate::Logger).not_to receive(:warn)
         expect(subject.characterization.ng_xml).to be_equivalent_to(fits_xml)
       end
     end

@@ -18,7 +18,7 @@ describe ExampleModel::Collection do
     before { FedoraMigrate::RelsExtDatastreamMover.new(FedoraMigrate.find("scholarsphere:#{collection}")).migrate }
     it "only migrates existing relationships" do
       expect(migrated_collection.members.count).to eql 2
-      expect(migrated_collection.member_ids).to_not include(missing_file)
+      expect(migrated_collection.member_ids).not_to include(missing_file)
     end
   end
 

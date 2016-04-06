@@ -13,7 +13,7 @@ describe FedoraMigrate do
     end
 
     it "returns their content" do
-      expect(subject.datastreams["content"].content).to_not be_nil
+      expect(subject.datastreams["content"].content).not_to be_nil
     end
   end
 end

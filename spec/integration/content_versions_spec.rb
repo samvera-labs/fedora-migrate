@@ -53,7 +53,7 @@ describe FedoraMigrate::DatastreamMover do
     end
     it "migrates only the most recent version" do
       expect(subject.versions.count).to eql 0
-      expect(subject.content).to_not be_nil
+      expect(subject.content).not_to be_nil
     end
     it "preserves metadata" do
       expect(subject.mime_type).to eql "image/png"

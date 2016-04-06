@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe FedoraMigrate::ObjectMover do
   before :all do
+    Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
     class GenericFile < ActiveFedora::Base
       belongs_to :batch, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
       property :title, predicate: ::RDF::DC.title do |index|
@@ -12,6 +13,7 @@ describe FedoraMigrate::ObjectMover do
       end
     end
 
+    Object.send(:remove_const, :Batch) if defined?(Batch)
     class Batch < ActiveFedora::Base
       has_many :generic_files, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
     end
@@ -19,6 +21,7 @@ describe FedoraMigrate::ObjectMover do
 
   after :all do
     Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
+    Object.send(:remove_const, :Batch) if defined?(Batch)
   end
 
   let(:parent_source) { FedoraMigrate.source.connection.find("sufia:rb68xc09k") }
