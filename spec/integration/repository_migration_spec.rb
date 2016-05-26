@@ -18,14 +18,7 @@ describe FedoraMigrate do
   context "when all target objects are defined" do
     before do
       Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
-      class GenericFile < ExampleModel::MigrationObject
-        belongs_to :batch, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
-        property :title, predicate: ::RDF::DC.title do |index|
-          index.as :stored_searchable, :facetable
-        end
-        property :creator, predicate: ::RDF::DC.creator do |index|
-          index.as :stored_searchable, :facetable
-        end
+      class GenericFile < ExampleModel::GenericFile
       end
 
       Object.send(:remove_const, :Batch) if defined?(Batch)

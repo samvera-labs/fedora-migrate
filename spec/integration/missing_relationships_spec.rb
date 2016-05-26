@@ -6,8 +6,15 @@ describe ExampleModel::Collection do
   let(:missing_file)  { "x346dj07p" }
 
   before do
+    Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
+    class GenericFile < ExampleModel::GenericFile
+    end
     FedoraMigrate::ObjectMover.new(FedoraMigrate.find("scholarsphere:#{collection}"), described_class.new(collection)).migrate
     files.each { |f| FedoraMigrate::ObjectMover.new(FedoraMigrate.find("scholarsphere:#{f}"), ExampleModel::MigrationObject.new(f)).migrate }
+  end
+
+  after do
+    Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
   end
 
   context "when migrating relationships" do
