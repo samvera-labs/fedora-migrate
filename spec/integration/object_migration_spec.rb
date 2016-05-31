@@ -45,9 +45,9 @@ describe FedoraMigrate::ObjectMover do
       before do
         Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
         class GenericFile < ActiveFedora::Base
-          contains "content", class_name: "ExampleModel::VersionedDatastream"
-          contains "thumbnail", class_name: "ActiveFedora::Datastream"
-          contains "characterization", class_name: "ActiveFedora::Datastream"
+          has_subresource "content", class_name: "ExampleModel::VersionedDatastream"
+          has_subresource "thumbnail", class_name: "ActiveFedora::File"
+          has_subresource "characterization", class_name: "ActiveFedora::File"
         end
       end
 
