@@ -22,7 +22,7 @@ module FedoraMigrate
     end
 
     def move_content
-      target.content = source.content
+      target.content = StringIO.new(source.content)
       target.original_name = source.label.try(:gsub, /"/, '\"')
       target.mime_type = source.mimeType
       save

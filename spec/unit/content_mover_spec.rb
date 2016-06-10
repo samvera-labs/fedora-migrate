@@ -33,7 +33,7 @@ describe FedoraMigrate::ContentMover do
 
   describe "#move_content" do
     before do
-      allow(target).to receive(:content=).with("foo")
+      allow(target).to receive(:content=)
       allow(target).to receive(:original_name=).with("label")
       allow(target).to receive(:mime_type=).with("mimetype")
       allow(target).to receive(:save).and_return(true)
