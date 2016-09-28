@@ -101,7 +101,7 @@ However, you are required to define any and all RDF properties on your object in
 
 ``` ruby
 class RDFObject < ActiveFedora::Base
-  property :title, predicate: ::RDF::DC.title do |index|
+  property :title, predicate: ::RDF::Vocab::DC.title do |index|
     index.as :stored_searchable, :facetable
   end
   contains "content", class_name: "ActiveFedora::File"
