@@ -1,16 +1,14 @@
 language: ruby
+cache: bundler
 sudo: false
 rvm:
-  - 2.2.0
-  - 2.2.1
-  - 2.3.0
+  - 2.3.1
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 notifications:
   irc:
     channels:
-      - "irc.freenode.org#scholarsphere"
       - "irc.freenode.org#projecthydra"
     template:
       - "%{repository}//%{branch}@%{commit} by %{author}: %{message} - %{build_url}"

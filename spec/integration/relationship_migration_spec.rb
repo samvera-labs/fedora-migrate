@@ -5,10 +5,10 @@ describe FedoraMigrate::ObjectMover do
     Object.send(:remove_const, :GenericFile) if defined?(GenericFile)
     class GenericFile < ActiveFedora::Base
       belongs_to :batch, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
-      property :title, predicate: ::RDF::DC.title do |index|
+      property :title, predicate: ::RDF::Vocab::DC.title do |index|
         index.as :stored_searchable, :facetable
       end
-      property :creator, predicate: ::RDF::DC.creator do |index|
+      property :creator, predicate: ::RDF::Vocab::DC.creator do |index|
         index.as :stored_searchable, :facetable
       end
     end

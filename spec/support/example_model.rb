@@ -56,13 +56,13 @@ require HCC_DIR + '/app/indexers/curation_concerns/collection_indexer'
 
 module ExampleModel
   class RDFProperties < ActiveFedora::Base
-    property :title, predicate: ::RDF::DC.title do |index|
+    property :title, predicate: ::RDF::Vocab::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
-    property :creator, predicate: ::RDF::DC.creator do |index|
+    property :creator, predicate: ::RDF::Vocab::DC.creator do |index|
       index.as :stored_searchable, :facetable
     end
-    property :description, predicate: ::RDF::DC.description do |index|
+    property :description, predicate: ::RDF::Vocab::DC.description do |index|
       index.type :text
       index.as :stored_searchable
     end
@@ -88,18 +88,18 @@ module ExampleModel
   end
 
   class RDFObject < ActiveFedora::Base
-    property :title, predicate: ::RDF::DC.title do |index|
+    property :title, predicate: ::RDF::Vocab::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
 
-    property :description, predicate: ::RDF::DC.description
+    property :description, predicate: ::RDF::Vocab::DC.description
 
-    property :date_uploaded, predicate: ::RDF::DC.dateSubmitted, multiple: false do |index|
+    property :date_uploaded, predicate: ::RDF::Vocab::DC.dateSubmitted, multiple: false do |index|
       index.type :date
       index.as :stored_sortable
     end
 
-    property :date_modified, predicate: ::RDF::DC.modified, multiple: false do |index|
+    property :date_modified, predicate: ::RDF::Vocab::DC.modified, multiple: false do |index|
       index.type :date
       index.as :stored_sortable
     end
@@ -147,10 +147,10 @@ module ExampleModel
 
   class GenericFile < MigrationObject
     belongs_to :batch, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
-    property :title, predicate: ::RDF::DC.title do |index|
+    property :title, predicate: ::RDF::Vocab::DC.title do |index|
       index.as :stored_searchable, :facetable
     end
-    property :creator, predicate: ::RDF::DC.creator do |index|
+    property :creator, predicate: ::RDF::Vocab::DC.creator do |index|
       index.as :stored_searchable, :facetable
     end
   end
