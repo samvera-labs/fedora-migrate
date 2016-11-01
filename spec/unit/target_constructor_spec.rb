@@ -25,4 +25,10 @@ describe FedoraMigrate::TargetConstructor do
     subject { described_class.new(mock_source) }
     its(:target) { is_expected.to be_nil }
   end
+
+  context "with a namespaced model" do
+    let(:list) { "info:fedora/afmodel:Enumerator_Lazy" }
+    subject { described_class.new(mock_source) }
+    its(:target) { is_expected.to eql Enumerator::Lazy }
+  end
 end

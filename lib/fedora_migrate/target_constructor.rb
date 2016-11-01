@@ -22,9 +22,21 @@ module FedoraMigrate
       end
 
       def vet(model)
+        klass = class_from_model(model)
+        klass ||= namespaced_class_from_model(model)
+        Logger.debug "rejecting #{model} for target" if klass.nil?
+        klass
+      end
+
+      def class_from_model(model)
         FedoraMigrate::Mover.id_component(model).constantize
       rescue NameError
-        Logger.debug "rejecting #{model} for target"
+        nil
+      end
+
+      def namespaced_class_from_model(model)
+        FedoraMigrate::Mover.id_component(model).split(/_/).map(&:camelize).join('::').constantize
+      rescue NameError
         nil
       end
 
