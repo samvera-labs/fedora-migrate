@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rubydora", "~> 1.8"
   spec.add_dependency "rchardet"
+  spec.add_dependency "rdf-rdfxml"
   
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "equivalent-xml"
