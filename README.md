@@ -193,7 +193,7 @@ This will run all the spec tests and leave jetty running if you wish to run spec
 If you have sample objects that you feel should be used as relevant testing examples, please add them to
 `spec/fixtures/objects` and re-run the tests. Sample objects should be exported from existing Fedora3
 repositories as foxml files using the "archive" option. This can be done via the admin web interface,
-[http://localhost:8983/fedora3/admin](http://localhost:8983/fedora3/admin), or using 
+[http://localhost:8983/fedora3/admin](http://localhost:8983/fedora3/admin), or using
 `FEDORA_HOME/client/bin/fedora-export.sh`.
 
 *Note that the script option may only work under full installs of Fedora3 and not hydra-jetty.*
@@ -203,6 +203,10 @@ repositories as foxml files using the "archive" option. This can be done via the
 See the list of issues for current bugs and feature needs. Add your own as needed.
 
 ## Contributing
+
+If you're working on PR for this project, create a feature branch off of `main`.
+
+This repository follows the [Samvera Community Code of Conduct](https://samvera.atlassian.net/wiki/spaces/samvera/pages/405212316/Code+of+Conduct) and [language recommendations](https://github.com/samvera/maintenance/blob/master/templates/CONTRIBUTING.md#language).  Please ***do not*** create a branch called `master` for this repository or as part of your pull request; the branch will either need to be removed or renamed before it can be considered for inclusion in the code base and history of this repository.
 
 ### Hydra Developers
 
